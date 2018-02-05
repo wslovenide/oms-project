@@ -29,12 +29,12 @@ public enum WebResultCode implements ResultCode{
 
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
     @Override
     public String getDesc() {
-        return null;
+        return desc;
     }
 
 }

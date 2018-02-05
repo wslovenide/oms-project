@@ -1,9 +1,8 @@
 package com.ws.oms.web.config.shiro;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
@@ -28,11 +27,21 @@ public class OmsAuthRealm extends AuthorizingRealm {
         Object next = principalCollection.fromRealm(getName()).iterator().next();
         logger.info("登陆的用户名为:{}",next);
 
-        return null;
+        AuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+
+        return authorizationInfo;
     }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        return null;
+        UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
+        logger.info("登陆信息： {}" , token);
+
+        if (!"admin".equals(token.getUsername())){
+            return null;
+        }
+        String defaultPassword = "123456";
+
+        return new SimpleAuthenticationInfo(token.getPrincipal(),defaultPassword,getName());
     }
 }

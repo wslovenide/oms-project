@@ -1,4 +1,4 @@
-package com.ws.oms.web.controller.auth.vo;
+package com.ws.service.api.auth;
 
 /**
  * Description:
@@ -6,9 +6,9 @@ package com.ws.oms.web.controller.auth.vo;
  * @author sheng.wang
  * @version 1.0.0
  * @email sheng.wang@chinaredstar.com
- * @date: 2018-02-05 15:55
+ * @date: 2018-02-05 16:32
  */
-public class LoginRespVO {
+public interface IUserService {
 
 
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 @Configuration
 public class ShiroConfiguration {
 
+    @Bean
     public DefaultWebSecurityManager securityManager(){
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(new OmsAuthRealm());
@@ -33,8 +34,6 @@ public class ShiroConfiguration {
 
         Map<String,String> beanDefinitionMap = new HashMap<>();
         beanDefinitionMap.put("/logon","anon");
-        beanDefinitionMap.put("/home/login","anon");
-        beanDefinitionMap.put("/static/**","anon");
         beanDefinitionMap.put("/**","authc");
         factoryBean.setFilterChainDefinitionMap(beanDefinitionMap);
 

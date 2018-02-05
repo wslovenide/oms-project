@@ -23,11 +23,11 @@ public enum ServiceResultCode implements ResultCode {
 
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
     @Override
     public String getDesc() {
-        return null;
+        return desc;
     }
 }
