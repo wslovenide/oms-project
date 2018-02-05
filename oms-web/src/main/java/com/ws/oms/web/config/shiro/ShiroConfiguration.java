@@ -28,13 +28,13 @@ public class ShiroConfiguration {
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(){
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
-        factoryBean.setSuccessUrl("/home/index");
-        factoryBean.setUnauthorizedUrl("/home/login");
+        factoryBean.setSuccessUrl("http://urms.mmall.com");
+        factoryBean.setUnauthorizedUrl("https://pay.weixin.qq.com/index.php/core/home/login");
         factoryBean.setLoginUrl("/logon");
 
         Map<String,String> beanDefinitionMap = new HashMap<>();
-        beanDefinitionMap.put("/logon","anon");
-        beanDefinitionMap.put("/**","authc");
+        beanDefinitionMap.put("/logon","authc");
+        beanDefinitionMap.put("/**","user");
         factoryBean.setFilterChainDefinitionMap(beanDefinitionMap);
 
         factoryBean.setSecurityManager(securityManager());
