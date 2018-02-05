@@ -12,5 +12,12 @@
 
     <artifactId>oms-job</artifactId>
 
+    <dependencies>
+
+
+
+
+    </dependencies>
+
 
 </project>
