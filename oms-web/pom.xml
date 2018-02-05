@@ -30,6 +30,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.ws.oms</groupId>
+            <artifactId>oms-service-api</artifactId>
+            <version>${oms.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
