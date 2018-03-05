@@ -50,19 +50,19 @@ public class LoginController {
 //    }
 
 
-    @RequestMapping(value = "/logon")
-    public void login(@ModelAttribute LoginReqVO loginVO){
-        if (StringUtils.isBlank(loginVO.getUsername()) || StringUtils.isBlank(loginVO.getPassword())){
-            logger.error("用户名或密码为空! username = {}, password = {}",loginVO.getUsername(),loginVO.getPassword());
-            return;
-        }
-        Subject subject = SecurityUtils.getSubject();
-        try {
-            subject.login(new UsernamePasswordToken(loginVO.getUsername(),loginVO.getPassword()));
-            logger.info("登陆成功 , username = {}" , loginVO.getUsername());
-        }catch (Exception e){
-            logger.info("登陆失败 , username = {}" , loginVO.getUsername());
-        }
-    }
+//    @RequestMapping(value = "/loginin")
+//    public void login(@ModelAttribute LoginReqVO loginVO){
+//        if (StringUtils.isBlank(loginVO.getUsername()) || StringUtils.isBlank(loginVO.getPassword())){
+//            logger.error("用户名或密码为空! username = {}, password = {}",loginVO.getUsername(),loginVO.getPassword());
+//            return;
+//        }
+//        Subject subject = SecurityUtils.getSubject();
+//        try {
+//            subject.login(new UsernamePasswordToken(loginVO.getUsername(),loginVO.getPassword()));
+//            logger.info("登陆成功 , username = {}" , loginVO.getUsername());
+//        }catch (Exception e){
+//            logger.info("登陆失败 , username = {}" , loginVO.getUsername());
+//        }
+//    }
 
 }

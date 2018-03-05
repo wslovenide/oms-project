@@ -40,6 +40,7 @@
     <module>oms-service</module>
     <module>oms-service-api</module>
     <module>oms-job</module>
+      <module>oms-chat</module>
   </modules>
 
 </project>

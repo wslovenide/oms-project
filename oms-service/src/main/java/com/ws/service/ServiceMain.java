@@ -1,8 +1,7 @@
-package com.ws.oms.web;
+package com.ws.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
 
 /**
  * Description:
@@ -10,14 +9,15 @@ import org.springframework.context.annotation.ImportResource;
  * @author sheng.wang
  * @version 1.0.0
  * @email sheng.wang@chinaredstar.com
- * @date: 2018-02-05 10:33
+ * @date: 2018-02-28 13:33
  */
 @SpringBootApplication
-@ImportResource("classpath:shiro.xml")
-public class WebMain {
+public class ServiceMain {
 
     public static void main(String[] args) {
-        SpringApplication.run(WebMain.class,args);
+
+        SpringApplication.run(ServiceMain.class,args);
+
     }
 
 }
