@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+        function logon() {
+            var name = $("#username").val();
+            var pass = $("#password").val();
+
+            $.ajax({
+                url:"http://localhost:8888/logon",
+                type:"post",
+                data:{username:name,password:pass},
+                success:function (data) {
+                    console.info(data);
+                }
+            });
+
+
+        }
+    </script>
+</head>
+<body>
+<form>
+    username:<input type="text" name="username" id="username" value="admin"/><br/>
+    password: <input type="text" name="password" id="password" value="123456"/><br/>
+    <input type="button" value="登录" onclick="logon();">
+</form>
+
+
+
+</body>
+</html>

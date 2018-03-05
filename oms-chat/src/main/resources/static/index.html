@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
     <title>聊天室</title>
     <script type="text/javascript">
-        var serverUrl = "47.75.15.228:8888/websocket/chat";
-//        var serverUrl = "localhost:8888/websocket/chat";
+//        var serverUrl = "47.75.15.228:8888/websocket/chat";
+        var serverUrl = "localhost:8888/websocket/chat";
         var ws;
         function initWebsocket() {
             if (window.WebSocket){
@@ -15,21 +15,41 @@
 
                 };
                 ws.onmessage = function (event) {
-                    var selfSend = event.data.substr(0,1);
-                    var message = event.data.substr(1);
-
-                    var label = selfSend == "1" ? "rightMessageLabel" : "leftMessageLabel";
-
-                    var chatData = "<div class='"+label+"'>" + message + "</div>";
-                    document.getElementById('messageContent').innerHTML +=  chatData;
+                    var jsonMsg = JSON.parse(event.data);
+                    if (jsonMsg.msgType == "1"){
+                        chatMessage(jsonMsg);
+                    }else {
+                        onlineOfflineNotifyMessage(jsonMsg);
+                    }
                 };
                 ws.onclose = function (event) {
-
+                    
                 };
             }else {
                 alert("您的浏览器不支持websocket,请升级!");
             }
         }
+
+        function chatMessage(jsonMsg) {
+            var label = jsonMsg.self ? "rightMessageLabel" : "leftMessageLabel";
+
+            var chatData = "<div class='"+label+"'>";
+            chatData += "<div class='msgClass'>" + jsonMsg.msg + "</div>";
+            chatData += "<div class='nickNameClass'>" + jsonMsg.nickName + "</div>";
+            chatData += "<div class='dateTimeClass'>" + jsonMsg.dateTime + "</div>";
+            chatData += "</div>";
+
+            var messageContent =  document.getElementById('messageContent');
+            messageContent.innerHTML +=  chatData;
+
+            messageContent.scrollTop = messageContent.scrollHeight;
+        }
+
+        function onlineOfflineNotifyMessage(jsonMsg) {
+            document.getElementById("onlineCount").innerHTML = jsonMsg.msg;
+        }
+
+
         function sendMessage() {
             if (ws){
                 var message = document.getElementById("message").value;
@@ -49,20 +69,37 @@
         initWebsocket();
     </script>
     <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        html {
+            height: 100%;
+        }
         body {
+            height: 100%;
             margin: 0 auto;
             font-family: Tahoma, Verdana, Arial, sans-serif;
         }
         .container{
-            width: 95%;
             height: 100%;
-            margin: 0 auto;
+            position: relative;
+        }
+        .content{
+            margin: 3px auto;
+            height: 90%;
+            width: 100%;
+            overflow:scroll;
+            overflow-x: hidden;
         }
         .bottom{
+            margin-top: 3px;
             width: 95%;
-            position: fixed;
-            bottom: 0.3rem;
+            position: relative;
+            bottom: 0.2rem;
             height:2rem;
+            padding-top: 4px;
+            margin-left: 4px;
         }
         .bottom input[type=text]{
             width: 60%;
@@ -73,23 +110,24 @@
             height:1.7rem;
             width: 4rem;
             margin-left: 2%;
+            background-color: darkgray;
         }
         .leftMessageLabel{
             margin-left: 1rem;
             float: left;
             margin-top: 1rem;
+            width: 60%;
             clear: both;
         }
         .rightMessageLabel{
             float: right;
+            width: 60%;
             margin-right: 1rem;
             margin-top: 1rem;
             clear: both;
+            border: 1px solid black;
         }
-        .content{
-            height: 500px;
-            overflow:scroll;
-            overflow-x: hidden;
+        .msgClass{
         }
     </style>
 </head>
@@ -103,6 +141,7 @@
         <footer class="bottom">
             <input type="text" name="message" id="message">
             <input type="button" value="发送" onclick="sendMessage();">
+            <span>当前在线人数: <spa id="onlineCount"></spa> </span>
         </footer>
     </div>
 </body>

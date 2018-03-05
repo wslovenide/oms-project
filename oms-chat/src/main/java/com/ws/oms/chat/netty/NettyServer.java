@@ -1,5 +1,7 @@
 package com.ws.oms.chat.netty;
 
+import com.ws.oms.chat.netty.handler.MyHttpRequestHandler;
+import com.ws.oms.chat.netty.handler.MyWebSocketHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -28,7 +30,6 @@ public class NettyServer {
 
     private static String webSocketUrl = "/websocket/chat";
 
-    private static Map<ChannelId,Channel> channelMap = new ConcurrentHashMap<>(512);
 
     public void start(){
         EventLoopGroup boss = new NioEventLoopGroup();
@@ -40,6 +41,7 @@ public class NettyServer {
             protected void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline().addLast(new HttpServerCodec());
                 ch.pipeline().addLast(new HttpObjectAggregator(65535));
+                ch.pipeline().addLast(new MyHttpRequestHandler());
                 ch.pipeline().addLast(new WebSocketServerProtocolHandler(webSocketUrl));
                 ch.pipeline().addLast(new WebSocketServerCompressionHandler());
                 ch.pipeline().addLast(new MyWebSocketHandler());
@@ -59,31 +61,4 @@ public class NettyServer {
 
     }
 
-
-    private static class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
-
-        @Override
-        public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            channelMap.put(ctx.channel().id(),ctx.channel());
-            super.channelActive(ctx);
-        }
-
-        @Override
-        public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-            channelMap.remove(ctx.channel().id());
-            super.channelInactive(ctx);
-        }
-
-        @Override
-        protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
-            System.out.println("===websocket ===" + msg.text());
-            channelMap.forEach((key,value) -> {
-                String prefix = "0";
-                if (key == ctx.channel().id()){
-                    prefix = "1";
-                }
-                value.writeAndFlush(new TextWebSocketFrame(prefix + msg.text()));
-            });
-        }
-    }
 }

@@ -17,6 +17,13 @@
             <artifactId>netty-all</artifactId>
             <version>4.1.5.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.7</version>
+        </dependency>
+
     </dependencies>
 
     <build>
