@@ -21,9 +21,8 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println(ctx.channel());
         channelMap.put(ctx.channel().id(),ctx.channel());
-        System.out.println("有人上线，在线人数 ： " + channelMap.size());
+        System.out.println("有人上线，在线人数 ： " + channelMap.size() + " , " + ctx.channel().id().asLongText());
 
         onlineOfflineNotify();
         super.channelActive(ctx);
@@ -33,7 +32,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         channelMap.remove(ctx.channel().id());
-        System.out.println("有人下线，在线人数 ： " + channelMap.size());
+        System.out.println("有人下线，在线人数 ： " + channelMap.size() + " , " + ctx.channel().id().asLongText());
 
         onlineOfflineNotify();
         super.channelInactive(ctx);

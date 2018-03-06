@@ -39,9 +39,6 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
                 response.headers().set(HttpHeaders.Names.CONTENT_TYPE,"application/json");
                 response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
                 response.headers().set(HttpHeaders.Names.ACCESS_CONTROL_ALLOW_ORIGIN,"*");
-                if (HttpHeaders.isKeepAlive(request)) {
-                    response.headers().set(RtspHeaders.Names.CONNECTION, RtspHeaders.Values.KEEP_ALIVE);
-                }
                 ctx.writeAndFlush(response);
                 return;
             }
