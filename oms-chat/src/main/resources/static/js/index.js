@@ -1,4 +1,4 @@
-// var serverUrl = "47.75.15.228:8888/websocket/chat";
+// var serverUrl = "47.75.15.228:8888";
 var serverUrl = "localhost:8888";
 var webSocketUrl = serverUrl + "/websocket/chat";
 var queryOnlineCountUrl = "http://" + serverUrl + "/query/onlineCount";
