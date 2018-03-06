@@ -8,7 +8,6 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
-import io.netty.handler.codec.rtsp.RtspHeaders;
 
 import java.nio.charset.Charset;
 
