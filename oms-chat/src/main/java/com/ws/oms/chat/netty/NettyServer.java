@@ -2,6 +2,8 @@ package com.ws.oms.chat.netty;
 
 import com.ws.oms.chat.netty.handler.MyHttpRequestHandler;
 import com.ws.oms.chat.netty.handler.MyWebSocketHandler;
+import com.ws.oms.chat.netty.service.ChannelService;
+import com.ws.oms.chat.netty.service.api.IChannelService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -32,6 +34,8 @@ public class NettyServer {
 
 
     public void start(){
+        IChannelService channelService = new ChannelService();
+
         EventLoopGroup boss = new NioEventLoopGroup();
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.channel(NioServerSocketChannel.class);
@@ -41,10 +45,10 @@ public class NettyServer {
             protected void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline().addLast(new HttpServerCodec());
                 ch.pipeline().addLast(new HttpObjectAggregator(65535));
-                ch.pipeline().addLast(new MyHttpRequestHandler());
+                ch.pipeline().addLast(new MyHttpRequestHandler(channelService));
                 ch.pipeline().addLast(new WebSocketServerProtocolHandler(webSocketUrl));
                 ch.pipeline().addLast(new WebSocketServerCompressionHandler());
-                ch.pipeline().addLast(new MyWebSocketHandler());
+                ch.pipeline().addLast(new MyWebSocketHandler(channelService));
             }
         });
         try {
