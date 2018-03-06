@@ -3,164 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
-    <title>聊天室</title>
-    <script type="text/javascript">
-//        var serverUrl = "47.75.15.228:8888/websocket/chat";
-        var serverUrl = "localhost:8888/websocket/chat";
-        var ws;
-        function initWebsocket() {
-            if (window.WebSocket){
-                ws = new WebSocket("ws:" + serverUrl);
-                ws.onopen = function (event) {
-
-                };
-                ws.onmessage = function (event) {
-                    var jsonMsg = JSON.parse(event.data);
-                    if (jsonMsg.msgType == "1"){
-                        chatMessage(jsonMsg);
-                    }else {
-                        onlineOfflineNotifyMessage(jsonMsg);
-                    }
-                };
-                ws.onclose = function (event) {
-                    
-                };
-            }else {
-                alert("您的浏览器不支持websocket,请升级!");
-            }
-        }
-
-        function chatMessage(jsonMsg) {
-            var label = jsonMsg.self ? "rightMessageLabel" : "leftMessageLabel";
-
-            var chatData = "<div class='"+label+"'>";
-            chatData += "<span class='msgClass'>" + jsonMsg.msg + "</span><br/>";
-            chatData += "<span class='nickNameClass'>" + jsonMsg.nickName + "</span>";
-            chatData += "<span class='dateTimeClass'>" + jsonMsg.dateTime + "</span>";
-            chatData += "</div>";
-
-            var messageContent =  document.getElementById('messageContent');
-            messageContent.innerHTML +=  chatData;
-
-            messageContent.scrollTop = messageContent.scrollHeight;
-        }
-
-        function onlineOfflineNotifyMessage(jsonMsg) {
-            document.getElementById("onlineCount").innerHTML = jsonMsg.msg;
-        }
-
-
-        function sendMessage() {
-            if (ws){
-                var message = document.getElementById("message").value;
-                if (message == ''){
-                    return;
-                }
-                ws.send(message);
-                document.getElementById("message").value = '';
-            }
-        }
-        document.onkeydown = function(event){
-            var e = event || window.event;
-            if(e && e.keyCode == 13){
-                sendMessage();
-            }
-        };
-        initWebsocket();
-    </script>
-    <style type="text/css">
-        * {
-            padding: 0;
-            margin: 0;
-        }
-        html {
-            height: 100%;
-        }
-        body {
-            height: 100%;
-            margin: 0 auto;
-            font-family: Tahoma, Verdana, Arial, sans-serif;
-        }
-        .container{
-            height: 100%;
-            position: relative;
-        }
-        .content{
-            margin: 3px auto;
-            height: 90%;
-            width: 100%;
-            overflow:scroll;
-            overflow-x: hidden;
-        }
-        .bottom{
-            margin-top: 3px;
-            width: 95%;
-            position: relative;
-            bottom: 0.2rem;
-            height:2rem;
-            padding-top: 4px;
-            margin-left: 4px;
-        }
-        .bottom input[type=text]{
-            width: 60%;
-            height:1.3rem;
-            float: left;
-        }
-        .bottom input[type=button]{
-            height:1.7rem;
-            width: 4rem;
-            margin-left: 2%;
-            background-color: darkgray;
-        }
-        .leftMessageLabel{
-            margin-left: 1rem;
-            float: left;
-            margin-top: 0.5rem;
-            width: 60%;
-            clear: both;
-            text-align: left;
-        }
-        .rightMessageLabel{
-            float: right;
-            width: 60%;
-            margin-right: 1rem;
-            margin-top: 0.5rem;
-            clear: both;
-            text-align: right;
-        }
-        .msgClass{
-
-        }
-        .nickNameClass{
-            font-size: 10px;
-            margin: auto 2px;
-        }
-        .dateTimeClass{
-            font-size: 10px;
-            margin: auto 2px;
-        }
-    </style>
+    <link href="css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <title id="titleText">聊天室</title>
 </head>
 <body>
     <div class="container">
 
         <div class="content" id="messageContent">
-                <div class="rightMessageLabel">
-                    <span class="msgClass"></span><br/>
-                    <span class="nickNameClass">admin</span>
-                    <span class="dateTimeClass">11:12:30</span>
-                </div>
-                <div class="leftMessageLabel">
-                    <span class="msgClass"></span><br/>
-                    <span class="nickNameClass">admin</span>
-                    <span class="dateTimeClass">11:12:30</span>
-                </div>
         </div>
 
         <footer class="bottom">
             <input type="text" name="message" id="message">
             <input type="button" value="发送" onclick="sendMessage();">
-            <span>当前在线人数: <span id="onlineCount"></span> </span>
         </footer>
     </div>
 </body>

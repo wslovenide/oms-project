@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
-    private static Map<ChannelId,Channel> channelMap = new ConcurrentHashMap<>(512);
+    public static Map<ChannelId,Channel> channelMap = new ConcurrentHashMap<>(512);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -29,17 +29,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
         super.channelActive(ctx);
     }
 
-//    @Override
-//    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-//        onlineOfflineNotify();
-//        super.handlerAdded(ctx);
-//    }
-//
-//    @Override
-//    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-//        onlineOfflineNotify();
-//        super.handlerRemoved(ctx);
-//    }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
