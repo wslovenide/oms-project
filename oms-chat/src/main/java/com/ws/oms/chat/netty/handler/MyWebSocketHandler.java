@@ -4,14 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.ws.oms.chat.netty.handler.dto.ChatMsg;
 import com.ws.oms.chat.netty.service.api.IChannelService;
 import com.ws.oms.chat.netty.util.Constant;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelId;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 
-import java.util.Map;
 
 /**
  * Created by gongmei on 2018/3/5.
