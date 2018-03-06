@@ -7,9 +7,16 @@ function initWebsocket() {
     if (window.WebSocket){
         ws = new WebSocket("ws:" + webSocketUrl);
         ws.onopen = function (event) {
-            $.get(queryOnlineCountUrl,function (data) {
-                onlineOfflineNotifyMessage(data);
-            })
+            $.ajax({
+                url:queryOnlineCountUrl,
+                type:"get",
+                dataType:"json",
+                // xhrFields: { withCredentials: true },
+                success:onlineOfflineNotifyMessage
+            });
+            // $.get(queryOnlineCountUrl,function (data) {
+            //     onlineOfflineNotifyMessage(data);
+            // })
         };
         ws.onmessage = function (event) {
             var jsonMsg = JSON.parse(event.data);

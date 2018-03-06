@@ -10,8 +10,13 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.ClientCookieEncoder;
+import io.netty.handler.codec.http.cookie.*;
+import io.netty.handler.codec.http.cookie.Cookie;
+import io.netty.handler.codec.http.cookie.DefaultCookie;
 
 import java.nio.charset.Charset;
+import java.util.UUID;
 
 /**
  * Created by gongmei on 2018/3/5.
@@ -46,6 +51,15 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
                 response.headers().set(HttpHeaders.Names.CONTENT_TYPE,"application/json");
                 response.headers().set(HttpHeaders.Names.CONTENT_LENGTH, response.content().readableBytes());
                 response.headers().set(HttpHeaders.Names.ACCESS_CONTROL_ALLOW_ORIGIN,"*");
+
+//                String cookie = request.headers().get("Cookie");
+//                if (cookie == null || "".equals(cookie.trim())){
+//                    Cookie newCookie = new DefaultCookie("sessionid",UUID.randomUUID().toString());
+//                    newCookie.setHttpOnly(true);
+//                    newCookie.setMaxAge(60 * 60 * 240);
+//                    newCookie.setDomain("/");
+//                    response.headers().set(HttpHeaders.Names.COOKIE, newCookie);
+//                }
                 ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
                 return;
             }
