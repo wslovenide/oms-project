@@ -3,20 +3,20 @@ package com.ws.oms.chat.netty.handler.dto;
 import com.ws.oms.chat.netty.util.DateUtil;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Created by gongmei on 2018/3/5.
  */
 public class ChatMsg implements Serializable {
 
-    private String msg;
+    private Object msg;
     private String msgType;
     private String dateTime;
     private boolean self = false;
     private String nickName;
 
     public ChatMsg(){
-
     }
 
     public ChatMsg(String msg){
@@ -24,11 +24,11 @@ public class ChatMsg implements Serializable {
         this.dateTime = DateUtil.getNowTimeStr();
     }
 
-    public String getMsg() {
+    public Object getMsg() {
         return msg;
     }
 
-    public void setMsg(String msg) {
+    public void setMsg(Object msg) {
         this.msg = msg;
     }
 

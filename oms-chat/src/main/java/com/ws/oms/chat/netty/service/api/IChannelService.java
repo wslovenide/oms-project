@@ -17,6 +17,10 @@ public interface IChannelService {
 
     void add(Channel channel);
 
+    void attach(Channel channel,String sesionid);
+
+    String getSessionId(Channel channel);
+
     Channel remove(Channel channel);
 
     Map<ChannelId,Channel> getOnlineChannelMap();

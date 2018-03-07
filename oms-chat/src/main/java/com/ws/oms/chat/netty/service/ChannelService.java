@@ -25,6 +25,8 @@ public class ChannelService implements IChannelService {
 
     private static Map<ChannelId,Channel> channelMap = new ConcurrentHashMap<>(512);
 
+    private static Map<ChannelId,String> channelSessionMap = new ConcurrentHashMap<>(512);
+
     @Override
     public void add(Channel channel) {
         channelMap.put(channel.id(),channel);
@@ -38,8 +40,19 @@ public class ChannelService implements IChannelService {
     }
 
     @Override
+    public void attach(Channel channel, String sesionid) {
+        channelSessionMap.put(channel.id(),sesionid);
+    }
+
+    @Override
+    public String getSessionId(Channel channel) {
+        return channelSessionMap.get(channel.id());
+    }
+
+    @Override
     public Channel remove(Channel channel) {
         channelMap.remove(channel.id());
+        channelSessionMap.remove(channel.id());
         onlineOfflineNotify();
         return channel;
     }

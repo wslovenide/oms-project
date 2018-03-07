@@ -39,14 +39,14 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
             HttpRequest request = (HttpRequest)msg;
 
             String url = request.uri();
-            System.out.println("请求的 url = " + url);
-
-            Iterator<Map.Entry<String, String>> iterator = request.headers().iteratorAsString();
-            while (iterator.hasNext()){
-                Map.Entry<String, String> entry = iterator.next();
-                System.out.println(entry.getKey() + " = " + entry.getValue());
-            }
-            System.out.println("========================");
+            System.out.println("请求的 url = " + url + " , " + ctx.channel());
+//
+//            Iterator<Map.Entry<String, String>> iterator = request.headers().iteratorAsString();
+//            while (iterator.hasNext()){
+//                Map.Entry<String, String> entry = iterator.next();
+//                System.out.println(entry.getKey() + " = " + entry.getValue());
+//            }
+//            System.out.println("========================");
 
             if (request.uri().endsWith(queryOnlineCountUrl)){
                 ChatMsg chatMsg = new ChatMsg(channelService.getOnlineChannelMap().size()+"");
@@ -63,6 +63,8 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
                 response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_CREDENTIALS,"true");
 
                 String cookie = request.headers().get("Cookie");
+                System.out.println("请求查询的channel : " + ctx.channel() + " , cookie : " + cookie);
+
                 if (cookie == null || "".equals(cookie.trim())){
                     Cookie newCookie = new DefaultCookie("sessionid",UUID.randomUUID().toString());
                     newCookie.setHttpOnly(true);

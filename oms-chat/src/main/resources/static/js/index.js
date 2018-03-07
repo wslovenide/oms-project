@@ -1,31 +1,28 @@
 // var serverUrl = "47.75.15.228:8888";
 var serverUrl = "localhost:8888";
 var webSocketUrl = serverUrl + "/websocket/chat";
-var queryOnlineCountUrl = "http://" + serverUrl + "/query/onlineCount";
 var ws;
 function initWebsocket() {
     if (window.WebSocket){
         ws = new WebSocket("ws:" + webSocketUrl);
         ws.onopen = function (event) {
-            $.ajax({
-                url:queryOnlineCountUrl,
-                type:"post",
-                dataType:"json",
-                crossDomain: true,
-                xhrFields: { withCredentials: true },
-                success:onlineOfflineNotifyMessage
-            });
+            var item = localStorage.getItem("sessionid");
+            var msg = {msgType:"3",msg:item};
+            console.info(msg);
+            ws.send(JSON.stringify(msg));
         };
         ws.onmessage = function (event) {
             var jsonMsg = JSON.parse(event.data);
             if (jsonMsg.msgType == "1"){
                 chatMessage(jsonMsg);
+            }else if (jsonMsg.msgType == "3"){
+                initSessionId(jsonMsg);
             }else {
                 onlineOfflineNotifyMessage(jsonMsg);
             }
         };
         ws.onclose = function (event) {
-
+            alert("连接已断开,确认后重新连接!");
         };
     }else {
         alert("您的浏览器不支持websocket,请升级!");
@@ -51,13 +48,18 @@ function onlineOfflineNotifyMessage(jsonMsg) {
     $("#titleText").text("聊天室(在线" + jsonMsg.msg + ")");
 }
 
+function initSessionId(jsonMsg) {
+    localStorage.setItem("sessionid",jsonMsg.msg);
+}
+
 function sendMessage() {
     if (ws){
         var messageObj = $("#message");
         if (messageObj.val() == ''){
             return;
         }
-        ws.send(messageObj.val());
+        var msg = {msg:messageObj.val(),msgType:"1"};
+        ws.send(JSON.stringify(msg));
         messageObj.val('');
     }
 }
