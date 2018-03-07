@@ -48,7 +48,7 @@ function onlineOfflineNotifyMessage(jsonMsg) {
 }
 
 function initSessionId(jsonMsg) {
-    if (jsonMsg.msg.length > 0){
+    if (jsonMsg.msg && jsonMsg.msg.length > 0){
         jsonMsg.msg.forEach(chatMessage);
     }
     localStorage.setItem("sessionId",jsonMsg.sessionId);
