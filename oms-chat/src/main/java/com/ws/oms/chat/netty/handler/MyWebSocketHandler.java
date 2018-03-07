@@ -40,11 +40,11 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
             if (fromMsg.getSessionId() == null || fromMsg.getSessionId().equals("")){
                 // sessionid 为空
                 fromMsg.setSessionId(UUID.randomUUID().toString());
-            }else {
-                // 查询聊天记录
-                List<ChatMsg> chatMsgHis = serviceContext.getChatMsg();
+            }
+            // 查询聊天记录
+            List<ChatMsg> chatMsgHis = serviceContext.getChatMsg();
+            if (!chatMsgHis.isEmpty()){
                 List<ChatMsg> nowList = new ArrayList<>(chatMsgHis.size());
-
                 for (ChatMsg chatMsg : chatMsgHis){
                     ChatMsg newChat = chatMsg.clone();
 
@@ -55,7 +55,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
                 fromMsg.setMsg(nowList);
             }
             ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(fromMsg)));
-
             serviceContext.attach(ctx.channel().id(),fromMsg.getSessionId());
         }else {
             ChatMsg chatMsg = new ChatMsg(fromMsg.getMsg().toString());
