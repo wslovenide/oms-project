@@ -22,7 +22,7 @@ public class ChatMsgDao implements IChatMsgDao {
     @Override
     public void save(ChatMsg chatMsg) {
         msgList.add(chatMsg);
-        if (msgList.size() > 1000){
+        if (msgList.size() > 2000){
             msgList.remove(0);
         }
     }
