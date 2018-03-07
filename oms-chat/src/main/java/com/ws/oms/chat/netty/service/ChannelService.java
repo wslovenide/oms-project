@@ -40,13 +40,13 @@ public class ChannelService implements IChannelService {
     }
 
     @Override
-    public void attach(Channel channel, String sesionid) {
-        channelSessionMap.put(channel.id(),sesionid);
+    public void attach(ChannelId channel, String sesionid) {
+        channelSessionMap.put(channel,sesionid);
     }
 
     @Override
-    public String getSessionId(Channel channel) {
-        return channelSessionMap.get(channel.id());
+    public String getSessionId(ChannelId channel) {
+        return channelSessionMap.get(channel);
     }
 
     @Override

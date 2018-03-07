@@ -17,9 +17,9 @@ public interface IChannelService {
 
     void add(Channel channel);
 
-    void attach(Channel channel,String sesionid);
+    void attach(ChannelId channelId,String sesionid);
 
-    String getSessionId(Channel channel);
+    String getSessionId(ChannelId channelId);
 
     Channel remove(Channel channel);
 

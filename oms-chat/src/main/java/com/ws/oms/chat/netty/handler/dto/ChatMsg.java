@@ -14,6 +14,7 @@ public class ChatMsg implements Serializable {
     private String msgType;
     private String dateTime;
     private boolean self = false;
+    private String sessionId;
     private String nickName;
 
     public ChatMsg(){
@@ -34,6 +35,14 @@ public class ChatMsg implements Serializable {
 
     public String getDateTime() {
         return dateTime;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public String getMsgType() {
