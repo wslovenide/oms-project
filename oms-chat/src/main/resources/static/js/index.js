@@ -6,9 +6,8 @@ function initWebsocket() {
     if (window.WebSocket){
         ws = new WebSocket("ws:" + webSocketUrl);
         ws.onopen = function (event) {
-            var item = localStorage.getItem("sessionid");
-            var msg = {msgType:"3",msg:item};
-            console.info(msg);
+            var item = localStorage.getItem("sessionId");
+            var msg = {msgType:"3",sessionId:item || ''};
             ws.send(JSON.stringify(msg));
         };
         ws.onmessage = function (event) {
@@ -49,7 +48,10 @@ function onlineOfflineNotifyMessage(jsonMsg) {
 }
 
 function initSessionId(jsonMsg) {
-    localStorage.setItem("sessionid",jsonMsg.msg);
+    if (jsonMsg.msg.length > 0){
+        jsonMsg.msg.forEach(chatMessage);
+    }
+    localStorage.setItem("sessionId",jsonMsg.sessionId);
 }
 
 function sendMessage() {

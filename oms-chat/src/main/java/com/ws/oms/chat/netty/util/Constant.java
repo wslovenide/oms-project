@@ -10,5 +10,4 @@ public class Constant {
 
 
     public static final String MSG_WEB_SOCKET_INIT = "3";
-
 }

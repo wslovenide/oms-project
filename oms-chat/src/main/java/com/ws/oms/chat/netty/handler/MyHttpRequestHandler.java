@@ -2,6 +2,7 @@ package com.ws.oms.chat.netty.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.ws.oms.chat.netty.handler.dto.ChatMsg;
+import com.ws.oms.chat.netty.service.ServiceContext;
 import com.ws.oms.chat.netty.service.api.IChannelService;
 import com.ws.oms.chat.netty.util.Constant;
 import io.netty.buffer.ByteBuf;
@@ -27,10 +28,10 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
 
     private String queryOnlineCountUrl = "/query/onlineCount";
 
-    private IChannelService channelService;
+    private ServiceContext serviceContext;
 
-    public MyHttpRequestHandler(IChannelService channelService){
-        this.channelService = channelService;
+    public MyHttpRequestHandler(ServiceContext serviceContext){
+        this.serviceContext = serviceContext;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
 //            System.out.println("========================");
 
             if (request.uri().endsWith(queryOnlineCountUrl)){
-                ChatMsg chatMsg = new ChatMsg(channelService.getOnlineChannelMap().size()+"");
+                ChatMsg chatMsg = new ChatMsg(serviceContext.getOnlineChannelMap().size()+"");
                 chatMsg.setMsgType(Constant.MSG_ONLINE_OFFLINE);
                 String jsonMsg = JSON.toJSONString(chatMsg);
 

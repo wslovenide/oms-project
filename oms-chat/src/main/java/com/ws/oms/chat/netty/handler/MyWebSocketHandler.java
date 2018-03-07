@@ -2,7 +2,10 @@ package com.ws.oms.chat.netty.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.ws.oms.chat.netty.handler.dto.ChatMsg;
+import com.ws.oms.chat.netty.service.ChatMsgDao;
+import com.ws.oms.chat.netty.service.ServiceContext;
 import com.ws.oms.chat.netty.service.api.IChannelService;
+import com.ws.oms.chat.netty.service.api.IChatMsgDao;
 import com.ws.oms.chat.netty.util.Constant;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,43 +22,57 @@ import java.util.UUID;
  */
 public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
-    private List<ChatMsg> msgList = new ArrayList<>();
+    private ServiceContext serviceContext;
 
-
-    private IChannelService channelService;
-
-    public MyWebSocketHandler(IChannelService channelService){
-        this.channelService = channelService;
+    public MyWebSocketHandler(ServiceContext serviceContext){
+        this.serviceContext = serviceContext;
     }
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt == WebSocketServerProtocolHandler.ServerHandshakeStateEvent.HANDSHAKE_COMPLETE){
-            channelService.add(ctx.channel());
+            serviceContext.add(ctx.channel());
         }
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
+        System.out.println(" message: " + msg.text());
         ChatMsg fromMsg = JSON.parseObject(msg.text(),ChatMsg.class);
         System.out.println(fromMsg);
         if (fromMsg.getMsgType().equals(Constant.MSG_WEB_SOCKET_INIT)){
-            if (fromMsg.getMsg() == null || fromMsg.getMsg().equals("")){
+            if (fromMsg.getSessionId() == null || fromMsg.getSessionId().equals("")){
                 // sessionid 为空
-                fromMsg.setMsg(UUID.randomUUID().toString());
-                ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(fromMsg)));
+                fromMsg.setSessionId(UUID.randomUUID().toString());
+            }else {
+                // 查询聊天记录
+                List<ChatMsg> chatMsgHis = serviceContext.getChatMsg();
+                List<ChatMsg> nowList = new ArrayList<>(chatMsgHis.size());
+
+                for (ChatMsg chatMsg : chatMsgHis){
+                    ChatMsg newChat = chatMsg.clone();
+
+                    newChat.setNickName(newChat.getSessionId().split("-")[0]);
+                    newChat.setSelf(newChat.getSessionId().equals(fromMsg.getSessionId()));
+                    nowList.add(newChat);
+                }
+                fromMsg.setMsg(nowList);
             }
-            channelService.attach(ctx.channel().id(),fromMsg.getMsg().toString());
+            ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(fromMsg)));
+
+            serviceContext.attach(ctx.channel().id(),fromMsg.getSessionId());
         }else {
             ChatMsg chatMsg = new ChatMsg(fromMsg.getMsg().toString());
             chatMsg.setMsgType(Constant.MSG_CHAT);
-            chatMsg.setSessionId(channelService.getSessionId(ctx.channel().id()));
-            channelService.getOnlineChannelMap().forEach((key,value) -> {
-                String sessionId = channelService.getSessionId(key);
+            chatMsg.setSessionId(serviceContext.getSessionId(ctx.channel().id()));
+            serviceContext.getOnlineChannelMap().forEach((key,value) -> {
+                String sessionId = serviceContext.getSessionId(key);
                 chatMsg.setSelf(sessionId.equals(chatMsg.getSessionId()));
                 chatMsg.setNickName(chatMsg.getSessionId().split("-")[0]);
                 value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(chatMsg)));
             });
+
+            serviceContext.save(chatMsg);
         }
     }
 

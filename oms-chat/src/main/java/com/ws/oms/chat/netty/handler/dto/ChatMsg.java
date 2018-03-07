@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by gongmei on 2018/3/5.
  */
-public class ChatMsg implements Serializable {
+public class ChatMsg implements Serializable,Cloneable {
 
     private Object msg;
     private String msgType;
@@ -71,6 +71,11 @@ public class ChatMsg implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    @Override
+    public ChatMsg clone() throws CloneNotSupportedException {
+        return (ChatMsg)super.clone();
     }
 
     @Override
