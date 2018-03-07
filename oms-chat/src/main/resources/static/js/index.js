@@ -9,14 +9,12 @@ function initWebsocket() {
         ws.onopen = function (event) {
             $.ajax({
                 url:queryOnlineCountUrl,
-                type:"get",
+                type:"post",
                 dataType:"json",
-                // xhrFields: { withCredentials: true },
+                crossDomain: true,
+                xhrFields: { withCredentials: true },
                 success:onlineOfflineNotifyMessage
             });
-            // $.get(queryOnlineCountUrl,function (data) {
-            //     onlineOfflineNotifyMessage(data);
-            // })
         };
         ws.onmessage = function (event) {
             var jsonMsg = JSON.parse(event.data);
