@@ -66,7 +66,7 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
                 if (cookie == null || "".equals(cookie.trim())){
                     Cookie newCookie = new DefaultCookie("sessionid",UUID.randomUUID().toString());
                     newCookie.setHttpOnly(true);
-                    newCookie.setMaxAge(60 * 60 * 240);
+                    newCookie.setMaxAge(60 * 60 * 2400);
                     response.headers().set("Set-Cookie", newCookie);
                 }
                 ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
