@@ -53,7 +53,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
             channelService.getOnlineChannelMap().forEach((key,value) -> {
                 String sessionId = channelService.getSessionId(key);
                 chatMsg.setSelf(sessionId.equals(chatMsg.getSessionId()));
-                chatMsg.setNickName(sessionId.split("-")[0]);
+                chatMsg.setNickName(chatMsg.getSessionId().split("-")[0]);
                 value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(chatMsg)));
             });
         }
