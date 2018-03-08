@@ -1,9 +1,8 @@
-package com.ws.oms.web;
+package com.ws.oms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -14,15 +13,12 @@ import org.springframework.context.annotation.ImportResource;
  * @email sheng.wang@chinaredstar.com
  * @date: 2018-02-05 10:33
  */
-@SpringBootApplication
-public class WebMain extends SpringBootServletInitializer{
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@ImportResource("classpath:spring/applicationContext-*.xml")
+public class WebMain {
 
     public static void main(String[] args) {
         SpringApplication.run(WebMain.class,args);
     }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(WebMain.class);
-    }
 }

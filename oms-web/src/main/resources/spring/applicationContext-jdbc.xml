@@ -46,14 +46,14 @@
 	<!-- mybatis文件配置，扫描所有mapper文件 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="master" />
-		<property name="mapperLocations" value="classpath:mapper/xml/*.xml" />
+		<property name="mapperLocations" value="classpath:mybatis/mapper/*.xml" />
 	</bean>
 
 
 	<!-- 配置扫描器 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!-- 扫描com.bdcluster.nams.dao这个包以及它的子包下的所有映射接口类 -->
-		<property name="basePackage" value="com.chinaredstar.tc.opas.payment.jdbc.mapper" />
+		<property name="basePackage" value="com.ws.oms.mapper" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 

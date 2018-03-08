@@ -1,11 +1,15 @@
 package com.ws.oms.web.controller.register;
 
+import com.ws.oms.model.TbUser;
+import com.ws.oms.service.user.api.IUserService;
 import com.ws.oms.web.controller.register.vo.RegisterReqVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * Description:
@@ -21,12 +25,20 @@ public class RegisterController {
 
     private Logger logger = LoggerFactory.getLogger(RegisterController.class);
 
+    @Resource
+    private IUserService userService;
+
+
     @RequestMapping("/add")
-    public String add(@RequestBody RegisterReqVO reqVO){
+    public TbUser add(@RequestBody RegisterReqVO reqVO){
         logger.info("开始注册:{}",reqVO);
 
 
-        return "/register/add";
+        System.out.println(userService);
+
+        return userService.getByUserName("admin");
+
+//        return "/register/add";
     }
 
 }

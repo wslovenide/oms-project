@@ -1,5 +1,7 @@
 package com.ws.oms.service.user.api;
 
+import com.ws.oms.model.TbUser;
+
 /**
  * Description:
  *
@@ -9,4 +11,7 @@ package com.ws.oms.service.user.api;
  * @date: 2018-03-08 11:15
  */
 public interface IUserService {
+
+    TbUser getByUserName(String usename);
+
 }
