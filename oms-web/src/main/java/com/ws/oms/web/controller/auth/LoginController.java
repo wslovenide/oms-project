@@ -1,8 +1,14 @@
 package com.ws.oms.web.controller.auth;
 
+import com.ws.oms.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * Description:
@@ -13,45 +19,27 @@ import org.springframework.stereotype.Controller;
  * @date: 2018-02-05 11:39
  */
 
-@Controller
+@RestController(value = "/login")
 public class LoginController {
 
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-//    @RequestMapping(value = "/logon",method = RequestMethod.POST)
-//    public Result<LoginRespVO> login(@ModelAttribute LoginReqVO loginVO){
-//        logger.info("开始登陆, 传入的参数为:{}",loginVO);
-//
-//        if (StringUtils.isBlank(loginVO.getUsername()) || StringUtils.isBlank(loginVO.getPassword())){
-//            logger.error("用户名或密码为空! username = {}, password = {}",loginVO.getUsername(),loginVO.getPassword());
-//            return Result.newError(WebResultCode.USERNAME_PASSWORD_PARAM);
-//        }
-//
-//        Subject subject = SecurityUtils.getSubject();
-//        try {
-//            subject.login(new UsernamePasswordToken(loginVO.getUsername(),loginVO.getPassword()));
-//            logger.info("登陆成功 , username = {}" , loginVO.getUsername());
-//        }catch (Exception e){
-//            logger.info("登陆失败 , username = {}" , loginVO.getUsername());
-//            return Result.newError(WebResultCode.USERNAME_PASSWORD_ERROR);
-//        }
-//        return null;
-//    }
+
+    @RequestMapping(value = "/getLoginInfo",method = RequestMethod.GET)
+    public Result<Object> getLoginInfo(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Object userInfo = session.getAttribute("userInfo");
+        logger.info("从session中取到的用户信息: {}" , userInfo);
+
+        return Result.newSuccess(userInfo);
+    }
 
 
-//    @RequestMapping(value = "/loginin")
-//    public void login(@ModelAttribute LoginReqVO loginVO){
-//        if (StringUtils.isBlank(loginVO.getUsername()) || StringUtils.isBlank(loginVO.getPassword())){
-//            logger.error("用户名或密码为空! username = {}, password = {}",loginVO.getUsername(),loginVO.getPassword());
-//            return;
-//        }
-//        Subject subject = SecurityUtils.getSubject();
-//        try {
-//            subject.login(new UsernamePasswordToken(loginVO.getUsername(),loginVO.getPassword()));
-//            logger.info("登陆成功 , username = {}" , loginVO.getUsername());
-//        }catch (Exception e){
-//            logger.info("登陆失败 , username = {}" , loginVO.getUsername());
-//        }
-//    }
+    public void login(HttpServletRequest request){
+
+
+
+    }
+
 
 }
