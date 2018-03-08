@@ -20,11 +20,11 @@ public class SCaptchaUtil {
 
     public static final String RANDOMCODEKEY= "RANDOMVALIDATECODEKEY";//放到session中的key
     //private String randString = "0123456789";//随机产生只有数字的字符串 private String
-    private String randString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";//随机产生只有字母的字符串
-    //private String randString = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";//随机产生数字与字母组合的字符串
+//    private String randString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";//随机产生只有字母的字符串
+    private String randString = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";//随机产生数字与字母组合的字符串
     private int width = 95;// 图片宽
     private int height = 25;// 图片高
-    private int lineSize = 40;// 干扰线数量
+    private int lineSize = 50;// 干扰线数量
     private int stringNum = 4;// 随机产生字符数量
 
     private Random random = new Random();

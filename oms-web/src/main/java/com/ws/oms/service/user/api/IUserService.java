@@ -1,6 +1,8 @@
 package com.ws.oms.service.user.api;
 
 import com.ws.oms.model.TbUser;
+import com.ws.oms.result.Result;
+import com.ws.oms.web.controller.register.vo.RegisterReqVO;
 
 /**
  * Description:
@@ -12,6 +14,8 @@ import com.ws.oms.model.TbUser;
  */
 public interface IUserService {
 
-    TbUser getByUserName(String usename);
+    Result<Boolean> register(RegisterReqVO reqVO);
+
+    TbUser getByUserName(String useName);
 
 }
