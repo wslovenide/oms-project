@@ -33,7 +33,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
-        System.out.println(" message: " + msg.text());
+        System.out.println(" message: " + msg.text() + " ,  remote:" + ctx.channel().remoteAddress() + " ,  local :" + ctx.channel().localAddress());
         ChatMsg fromMsg = JSON.parseObject(msg.text(),ChatMsg.class);
         System.out.println(fromMsg);
         if (fromMsg.getMsgType().equals(Constant.MSG_WEB_SOCKET_INIT)){
