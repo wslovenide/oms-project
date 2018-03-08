@@ -15,9 +15,9 @@ import java.util.Map;
  */
 public interface IChannelService {
 
-    void add(Channel channel);
+//    void add(Channel channel);
 
-    void attach(ChannelId channelId,String sesionid);
+    void attach(Channel channel,String sesionid);
 
     String getSessionId(ChannelId channelId);
 

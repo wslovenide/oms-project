@@ -28,20 +28,15 @@ public class ChannelService implements IChannelService {
     private static Map<ChannelId,String> channelSessionMap = new ConcurrentHashMap<>(512);
 
     @Override
-    public void add(Channel channel) {
-        channelMap.put(channel.id(),channel);
+    public void attach(Channel channel, String sesionid) {
+        channelSessionMap.put(channel.id(),sesionid);
         channel.closeFuture().addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 remove(channel);
             }
         });
-        onlineOfflineNotify();
-    }
-
-    @Override
-    public void attach(ChannelId channel, String sesionid) {
-        channelSessionMap.put(channel,sesionid);
+        onlineOfflineNotify(channel,sesionid);
     }
 
     @Override
@@ -52,8 +47,9 @@ public class ChannelService implements IChannelService {
     @Override
     public Channel remove(Channel channel) {
         channelMap.remove(channel.id());
-        channelSessionMap.remove(channel.id());
-        onlineOfflineNotify();
+        String sessionId = channelSessionMap.remove(channel.id());
+
+        onlineOfflineNotify(channel,sessionId);
         return channel;
     }
 
@@ -62,7 +58,7 @@ public class ChannelService implements IChannelService {
         return channelMap;
     }
 
-    private void onlineOfflineNotify(){
+    private void onlineOfflineNotify(Channel channel,String sessionId){
         if (channelMap.isEmpty()){
             System.out.println("当前无人在线，无需发送通知消息!");
             return;
@@ -70,6 +66,8 @@ public class ChannelService implements IChannelService {
         System.out.println("当前在线的人数为: " + channelMap.size());
         ChatMsg chatMsg = new ChatMsg(String.valueOf(channelMap.size()));
         chatMsg.setMsgType(Constant.MSG_ONLINE_OFFLINE);
+        chatMsg.setSessionId(sessionId);
+        chatMsg.setNickName(sessionId.split("-")[0]);
 
         String jsonMsg = JSON.toJSONString(chatMsg);
 

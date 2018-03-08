@@ -2,9 +2,7 @@ package com.ws.oms.chat.netty;
 
 import com.ws.oms.chat.netty.handler.MyHttpRequestHandler;
 import com.ws.oms.chat.netty.handler.MyWebSocketHandler;
-import com.ws.oms.chat.netty.service.ChannelService;
 import com.ws.oms.chat.netty.service.ServiceContext;
-import com.ws.oms.chat.netty.service.api.IChannelService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -12,12 +10,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Description:
