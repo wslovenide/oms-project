@@ -4,6 +4,7 @@ import com.ws.oms.mapper.TbUserMapper;
 import com.ws.oms.model.TbUser;
 import com.ws.oms.result.Result;
 import com.ws.oms.service.user.api.IUserService;
+import com.ws.oms.web.controller.auth.vo.LoginReqVO;
 import com.ws.oms.web.controller.register.vo.RegisterReqVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,5 +48,14 @@ public class UserService implements IUserService {
     @Override
     public TbUser getByUserName(String userName) {
         return tbUserMapper.selectByUserName(userName);
+    }
+
+    @Override
+    public TbUser login(LoginReqVO reqVO) {
+        TbUser user = getByUserName(reqVO.getUsername());
+        if (user == null || !user.getPassword().equals(reqVO.getPassword())){
+            return null;
+        }
+        return user;
     }
 }

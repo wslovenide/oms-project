@@ -15,6 +15,8 @@ public enum WebResultCode implements ResultCode {
     PARAM_NULL_ERROR("1003","必要字段为空"),
     PASSWORD_CONFIRM_ERROR("1004","确认密码错误"),
     USER_NAME_EXISTS("1005","用户名已存在"),
+    LOGIN_PARAM_NULL("1006","用户名和密码为空"),
+    USERNAME_PASSWORD_ERROR("1007","用户名或密码错误"),
 
     ERROR("500","系统错误"),
     SUCCESS("200","操作成功")

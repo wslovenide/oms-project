@@ -10,5 +10,13 @@ package com.ws.oms.web.controller.auth.vo;
  */
 public class LoginRespVO {
 
+    private String userName;
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }
