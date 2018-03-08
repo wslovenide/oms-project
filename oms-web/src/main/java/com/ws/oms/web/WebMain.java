@@ -2,6 +2,8 @@ package com.ws.oms.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -13,11 +15,14 @@ import org.springframework.context.annotation.ImportResource;
  * @date: 2018-02-05 10:33
  */
 @SpringBootApplication
-@ImportResource("classpath:shiro.xml")
-public class WebMain {
+public class WebMain extends SpringBootServletInitializer{
 
     public static void main(String[] args) {
         SpringApplication.run(WebMain.class,args);
     }
 
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(WebMain.class);
+    }
 }
