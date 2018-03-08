@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<bean id="master" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		
+		<!-- 基本属性name、url、user、password -->
+		<property name="username" value="${master.username}" />
+		<property name="url" value="${master.driver.url}" />
+		<property name="password" value="${master.password}" />
+		<property name="name" value="${master.name}" />
+
+		<!-- 连接池配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${jdbc.pool.durid.initialSize}" />
+		<property name="minIdle" value="${jdbc.pool.durid.minIdle}" />
+		<property name="maxActive" value="${jdbc.pool.durid.maxActive}" />
+		
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${jdbc.pool.durid.maxWait}" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis"
+			value="${jdbc.pool.durid.timeBetweenEvictionRunsMillis}" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis"
+			value="${jdbc.pool.durid.minEvictableIdleTimeMillis}" />
+
+		<!-- 检测连接配置-->
+		<property name="validationQuery" value="${jdbc.pool.durid.validationQuery}" />
+		<property name="testWhileIdle" value="${jdbc.pool.durid.testWhileIdle}" />
+		<property name="testOnBorrow" value="${jdbc.pool.durid.testOnBorrow}" />
+		<property name="testOnReturn" value="${jdbc.pool.durid.testOnReturn}" />
+		
+		<!-- 连接属性 -->
+		<property name="connectionProperties" value="clientEncoding=UTF-8" />
+	</bean>
+	
+	
+	<!-- mybatis文件配置，扫描所有mapper文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="master" />
+		<property name="mapperLocations" value="classpath:mapper/xml/*.xml" />
+	</bean>
+
+
+	<!-- 配置扫描器 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 扫描com.bdcluster.nams.dao这个包以及它的子包下的所有映射接口类 -->
+		<property name="basePackage" value="com.chinaredstar.tc.opas.payment.jdbc.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<!-- 配置Spring的事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="master" />
+	</bean>
+
+	<!--注解方式配置事物 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>

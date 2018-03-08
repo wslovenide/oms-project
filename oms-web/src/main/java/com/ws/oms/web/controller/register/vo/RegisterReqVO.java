@@ -8,6 +8,7 @@ public class RegisterReqVO {
     private String username;
     private String password;
     private String confirmPassword;
+    private String verifyCode;
 
     public String getUsername() {
         return username;
@@ -31,6 +32,14 @@ public class RegisterReqVO {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
     }
 
     @Override
