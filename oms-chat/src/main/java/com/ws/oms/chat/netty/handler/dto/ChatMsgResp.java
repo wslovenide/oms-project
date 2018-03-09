@@ -11,7 +11,7 @@ package com.ws.oms.chat.netty.handler.dto;
 public class ChatMsgResp extends BaseReq{
 
     private Object msg;
-    private boolean success;
+    private boolean success = true;
 
     public Object getMsg() {
         return msg;

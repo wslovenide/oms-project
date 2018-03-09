@@ -5,6 +5,7 @@ import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.service.api.IChatMsgDao;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Description:
@@ -49,6 +50,15 @@ public class ChatMsgDao implements IChatMsgDao {
 
     @Override
     public List<ChatMsgItemResp> getChatMsgByGroup(String groupId, String sessionId) {
+        List<ChatMsgItemResp> respList = groupMessageMap.get(groupId);
+        if (respList != null && respList.size() > 0){
+            List<ChatMsgItemResp> collect = respList.parallelStream().map(item -> {
+                ChatMsgItemResp newItem = item.clone();
+                newItem.setSelf(newItem.getSessionId().equals(sessionId));
+                return newItem;
+            }).collect(Collectors.toList());
+            return collect;
+        }
         return null;
     }
 }

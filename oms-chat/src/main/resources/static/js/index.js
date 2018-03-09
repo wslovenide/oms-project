@@ -12,12 +12,19 @@ function initWebsocket() {
         };
         ws.onmessage = function (event) {
             var jsonMsg = JSON.parse(event.data);
-            if (jsonMsg.msgType == "1"){
-                chatMessage(jsonMsg);
-            }else if (jsonMsg.msgType == "3"){
-                initSessionId(jsonMsg);
-            }else {
-                onlineOfflineNotifyMessage(jsonMsg);
+            switch (jsonMsg.command){
+                // webSocket初始化返回
+                case "1":
+                    initWebSocketResult(jsonMsg);
+                    break;
+                // ONLINE_EVENT,OFFLINE_EVENT
+                case "11":
+                    chatMessage(jsonMsg.msg);
+                    break;
+                case "20":
+                case "21":
+                    onlineOfflineNotifyMessage(jsonMsg);
+                    break;
             }
         };
         ws.onclose = function (event) {
@@ -44,15 +51,20 @@ function chatMessage(jsonMsg) {
 }
 
 function onlineOfflineNotifyMessage(jsonMsg) {
-    $("#titleText").text("聊天室(在线" + jsonMsg.msg + ")");
+    console.info(jsonMsg);
+    if (jsonMsg.success && jsonMsg.msg){
+        $("#titleText").text("聊天室(在线" + jsonMsg.msg.msg + ")");
+    }
 }
 
-function initSessionId(jsonMsg) {
+function initWebSocketResult(jsonMsg) {
+    localStorage.setItem("sessionId",jsonMsg.sessionId);
+
     if (jsonMsg.msg && jsonMsg.msg.length > 0){
         jsonMsg.msg.forEach(chatMessage);
     }
-    localStorage.setItem("sessionId",jsonMsg.sessionId);
 }
+
 
 function sendMessage() {
     if (ws){

@@ -2,13 +2,11 @@ package com.ws.oms.chat.netty.service;
 
 import com.alibaba.fastjson.JSON;
 import com.ws.oms.chat.netty.handler.dto.*;
-import com.ws.oms.chat.netty.service.api.IChatMsgDao;
 import com.ws.oms.chat.netty.service.api.IChatMsgService;
 import com.ws.oms.chat.netty.util.Constant;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.apache.commons.lang3.StringUtils;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,6 +91,7 @@ public class ChatMsgService implements IChatMsgService {
         resp.setMsg(item);
 
         serviceContext.broadcastMessage(sessionId,groupId,resp);
+        serviceContext.save(item);
     }
 
 }

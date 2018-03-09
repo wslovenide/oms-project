@@ -2,6 +2,7 @@ package com.ws.oms.chat.netty.handler.dto;
 
 import com.ws.oms.chat.netty.util.DateUtil;
 
+import java.io.Closeable;
 import java.io.Serializable;
 
 /**
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * @email sheng.wang@chinaredstar.com
  * @date: 2018-03-09 16:09
  */
-public class ChatMsgItemResp implements Serializable{
+public class ChatMsgItemResp implements Serializable , Cloneable{
 
     private String msg;
     private String dateTime;
@@ -71,6 +72,16 @@ public class ChatMsgItemResp implements Serializable{
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    @Override
+    public ChatMsgItemResp clone()  {
+        try {
+            return (ChatMsgItemResp)super.clone();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

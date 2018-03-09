@@ -6,13 +6,10 @@ import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
 import com.ws.oms.chat.netty.service.api.IChannelService;
 import com.ws.oms.chat.netty.util.Constant;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelId;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Description:
@@ -40,9 +37,6 @@ public class ChannelService implements IChannelService {
     // 每个用户对应的group列表
     private static Map<String,Set<String>> sessionGroupMap = new ConcurrentHashMap<>(512);
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(5);
-
-
     @Override
     public void attach(Channel channel, String sessionId) {
 
@@ -65,7 +59,7 @@ public class ChannelService implements IChannelService {
         resp.setMsg(sessionId);
 
         // 广播消息
-        broadcastMessage(sessionId,resp);
+        broadcastMessage(sessionId,resp,channel);
     }
 
     @Override
@@ -83,40 +77,44 @@ public class ChannelService implements IChannelService {
         resp.setSessionId(sessionId);
         resp.setMsg(sessionId);
 
-        executorService.submit(() -> {
-            sessionGroupMap.get(sessionId).forEach(group -> {
-                Iterator<Channel> iterator = groupChannelMap.get(group).iterator();
-                while (iterator.hasNext()){
-                    Channel next = iterator.next();
-                    if (!next.isOpen() || !next.isActive()){
-                        iterator.remove();
-                        continue;
-                    }
-                    if (next == channel){
-                        iterator.remove();
-                        break;
-                    }
+        sessionGroupMap.get(sessionId).forEach(group -> {
+            Iterator<Channel> iterator = groupChannelMap.get(group).iterator();
+            while (iterator.hasNext()){
+                Channel next = iterator.next();
+                if (!next.isOpen() || !next.isActive()){
+                    iterator.remove();
+                    continue;
                 }
-            });
+                if (next == channel){
+                    iterator.remove();
+                    break;
+                }
+            }
         });
         // 广播消息
-        broadcastMessage(sessionId,resp);
+        broadcastMessage(sessionId,resp,channel);
         return channel;
     }
 
     @Override
-    public void broadcastMessage(String sessionId, ChatMsgResp chatMsgResp) {
+    public void broadcastMessage(String sessionId, ChatMsgResp chatMsgResp,Channel current) {
         // 根据sessionId 获取所在的group列表，并通知下线
         Set<String> set = sessionGroupMap.get(sessionId);
         if (set != null && set.size() > 0){
-            TextWebSocketFrame respMsg = new TextWebSocketFrame(JSON.toJSONString(chatMsgResp));
             set.forEach(groupId -> {
                 // 这个用户所在每一个组均发送消息
                 List<Channel> channelList = groupChannelMap.get(groupId);
                 if (channelList != null && channelList.size() > 0){
                     channelList.forEach(ch -> {
-                        if (ch.isOpen() && ch.isActive() && ch.isWritable()){
-                            ch.writeAndFlush(respMsg);
+                        ChatMsgItemResp itemResp = new ChatMsgItemResp();
+                        itemResp.setMsg(channelList.size() + "");
+                        itemResp.setGroupId(groupId);
+                        chatMsgResp.setMsg(itemResp);
+                        TextWebSocketFrame respMsg = new TextWebSocketFrame(JSON.toJSONString(chatMsgResp));
+                        if (ch != current){
+                            if (ch.isOpen() && ch.isActive() && ch.isWritable()){
+                                ch.writeAndFlush(respMsg);
+                            }
                         }
                     });
                 }
@@ -130,7 +128,7 @@ public class ChannelService implements IChannelService {
         if (channelList != null && channelList.size() > 0){
             channelList.forEach(ch -> {
                 ChatMsgItemResp itemSelf = (ChatMsgItemResp)chatMsgResp.getMsg();
-                if (ch.isOpen() && ch.isActive() && ch.isWritable()){
+                if (ch.isOpen() && ch.isWritable()){
                     String chSessionId = channelSessionMap.get(ch);
                     itemSelf.setSelf(chSessionId.equals(itemSelf.getSessionId()));
                     chatMsgResp.setMsg(itemSelf);

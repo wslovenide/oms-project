@@ -48,8 +48,8 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     }
 
     @Override
-    public void broadcastMessage(String sessionId, ChatMsgResp chatMsgResp) {
-        channelService.broadcastMessage(sessionId,chatMsgResp);
+    public void broadcastMessage(String sessionId, ChatMsgResp chatMsgResp,Channel channel) {
+        channelService.broadcastMessage(sessionId,chatMsgResp,channel);
     }
 
     @Override

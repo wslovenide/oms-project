@@ -24,7 +24,7 @@ public interface IChannelService {
 
     Channel remove(Channel channel);
 
-    void broadcastMessage(String sessionId,ChatMsgResp chatMsgResp);
+    void broadcastMessage(String sessionId,ChatMsgResp chatMsgResp,Channel current);
 
     void broadcastMessage(String sessionId, String groupId ,ChatMsgResp chatMsgResp);
 
