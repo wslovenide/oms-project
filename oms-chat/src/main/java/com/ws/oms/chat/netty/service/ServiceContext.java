@@ -68,6 +68,11 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     }
 
     @Override
+    public void save(ChatMsgItemResp itemR) {
+        chatMsgDao.save(itemR);
+    }
+
+    @Override
     public List<ChatMsg> getChatMsg() {
         return chatMsgDao.getChatMsg();
     }
