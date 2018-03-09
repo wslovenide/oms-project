@@ -1,17 +1,9 @@
 package com.ws.oms.chat.netty.handler;
 
-import com.alibaba.fastjson.JSON;
-import com.ws.oms.chat.netty.handler.dto.BaseReq;
-import com.ws.oms.chat.netty.handler.dto.ChatMsg;
 import com.ws.oms.chat.netty.service.ServiceContext;
-import com.ws.oms.chat.netty.util.Constant;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 
 /**
