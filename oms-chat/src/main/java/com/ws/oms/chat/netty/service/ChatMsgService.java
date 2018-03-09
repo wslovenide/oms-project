@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.ws.oms.chat.netty.handler.dto.*;
 import com.ws.oms.chat.netty.service.api.IChatMsgService;
 import com.ws.oms.chat.netty.util.Constant;
+import com.ws.oms.chat.netty.util.ZhuanYiCharUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.apache.commons.lang3.StringUtils;
@@ -87,7 +88,7 @@ public class ChatMsgService implements IChatMsgService {
         item.setSessionId(sessionId);
         item.setGroupId(groupId);
         item.setNickName(sessionId);
-        item.setMsg(msgReq.getMsg());
+        item.setMsg(ZhuanYiCharUtil.zhuanYi(msgReq.getMsg()));
 
         resp.setMsg(item);
 
