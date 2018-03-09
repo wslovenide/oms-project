@@ -26,14 +26,14 @@ public class ServiceContext implements IChannelService, IChatMsgDao{
         channelService = new ChannelService();
         chatMsgDao = new ChatMsgDao();
     }
+//
+//    @Override
+//    public void add(Channel channel) {
+//        channelService.add(channel);
+//    }
 
     @Override
-    public void add(Channel channel) {
-        channelService.add(channel);
-    }
-
-    @Override
-    public void attach(ChannelId channelId, String sesionid) {
+    public void attach(Channel channelId, String sesionid) {
         channelService.attach(channelId,sesionid);
     }
 
