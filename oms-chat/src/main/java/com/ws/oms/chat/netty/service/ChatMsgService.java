@@ -44,24 +44,13 @@ public class ChatMsgService implements IChatMsgService {
 
                 break;
             default:
-
+                ChatMsgResp resp = new ChatMsgResp();
+                resp.setSuccess(false);
+                resp.setSessionId(baseReq.getSessionId());
+                resp.setCommand(baseReq.getCommand());
+                ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(resp)));
                 break;
         }
-//        if (fromMsg.getMsgType().equals(Constant.WEB_SOCKET_INIT)){
-//
-//        }else {
-//            ChatMsg chatMsg = new ChatMsg(fromMsg.getMsg().toString());
-//            chatMsg.setMsgType(Constant.MSG_CHAT);
-//            chatMsg.setSessionId(serviceContext.getSessionId(ctx.channel().id()));
-//            serviceContext.getOnlineChannelMap().forEach((key,value) -> {
-//                String sessionId = serviceContext.getSessionId(key);
-//                chatMsg.setSelf(sessionId.equals(chatMsg.getSessionId()));
-//                chatMsg.setNickName(chatMsg.getSessionId().split("-")[0]);
-//                value.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(chatMsg)));
-//            });
-//
-//            serviceContext.save(chatMsg);
-//        }
     }
 
     private void handleWebSocketInit(ChannelHandlerContext ctx, BaseReq baseReq){

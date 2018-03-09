@@ -11,6 +11,7 @@ package com.ws.oms.chat.netty.handler.dto;
 public class ChatMsgResp extends BaseReq{
 
     private Object msg;
+    private boolean success;
 
     public Object getMsg() {
         return msg;
@@ -20,10 +21,19 @@ public class ChatMsgResp extends BaseReq{
         this.msg = msg;
     }
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
     @Override
     public String toString() {
         return "ChatMsgResp{" +
                 "msg=" + msg +
+                ", success=" + success +
                 "} " + super.toString();
     }
 }

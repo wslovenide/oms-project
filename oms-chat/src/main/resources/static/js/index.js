@@ -7,7 +7,7 @@ function initWebsocket() {
         ws = new WebSocket("ws:" + webSocketUrl);
         ws.onopen = function (event) {
             var item = localStorage.getItem("sessionId");
-            var msg = {msgType:"3",sessionId:item || ''};
+            var msg = {command:"1",sessionId:item || ''};
             ws.send(JSON.stringify(msg));
         };
         ws.onmessage = function (event) {
@@ -60,7 +60,7 @@ function sendMessage() {
         if (messageObj.val() == ''){
             return;
         }
-        var msg = {msg:messageObj.val(),msgType:"1"};
+        var msg = {msg:messageObj.val(),command:"10",sessionId:localStorage.getItem("sessionId")};
         ws.send(JSON.stringify(msg));
         messageObj.val('');
     }

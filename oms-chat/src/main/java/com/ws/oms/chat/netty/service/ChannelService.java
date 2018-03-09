@@ -46,6 +46,8 @@ public class ChannelService implements IChannelService {
     @Override
     public void attach(Channel channel, String sessionId) {
 
+        channelSessionMap.put(channel,sessionId);
+
         channel.closeFuture().addListener(future -> remove(channel));
 
         // 保存channel 到公共的房间

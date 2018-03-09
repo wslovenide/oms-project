@@ -50,8 +50,8 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
 //            System.out.println("========================");
 
             if (request.uri().endsWith(queryOnlineCountUrl)){
-                ChatMsg chatMsg = new ChatMsg(serviceContext.getOnlineChannelMap().size()+"");
-                chatMsg.setMsgType(Constant.MSG_ONLINE_OFFLINE);
+                ChatMsg chatMsg = new ChatMsg();
+                chatMsg.setMsgType("");
                 String jsonMsg = JSON.toJSONString(chatMsg);
 
                 ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer();
