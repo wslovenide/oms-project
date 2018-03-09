@@ -24,12 +24,12 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
         this.serviceContext = serviceContext;
     }
 
-    @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt == WebSocketServerProtocolHandler.ServerHandshakeStateEvent.HANDSHAKE_COMPLETE){
-            serviceContext.add(ctx.channel());
-        }
-    }
+//    @Override
+//    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+//        if (evt == WebSocketServerProtocolHandler.ServerHandshakeStateEvent.HANDSHAKE_COMPLETE){
+//            serviceContext.add(ctx.channel());
+//        }
+//    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
@@ -55,7 +55,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
                 fromMsg.setMsg(nowList);
             }
             ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(fromMsg)));
-            serviceContext.attach(ctx.channel().id(),fromMsg.getSessionId());
+            serviceContext.attach(ctx.channel(),fromMsg.getSessionId());
         }else {
             ChatMsg chatMsg = new ChatMsg(fromMsg.getMsg().toString());
             chatMsg.setMsgType(Constant.MSG_CHAT);
