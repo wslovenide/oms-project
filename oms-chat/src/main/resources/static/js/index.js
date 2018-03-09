@@ -60,7 +60,8 @@ function sendMessage() {
         if (messageObj.val() == ''){
             return;
         }
-        var msg = {msg:messageObj.val(),command:"10",sessionId:localStorage.getItem("sessionId")};
+        var sessionId = localStorage.getItem("sessionId");
+        var msg = {msg:messageObj.val(),command:"10",sessionId:sessionId || ''};
         ws.send(JSON.stringify(msg));
         messageObj.val('');
     }
