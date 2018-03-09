@@ -4,9 +4,7 @@ import com.ws.oms.chat.netty.handler.dto.ChatMsg;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.service.api.IChatMsgDao;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Description:
@@ -20,11 +18,27 @@ public class ChatMsgDao implements IChatMsgDao {
 
     private List<ChatMsg> msgList = new LinkedList<>();
 
+    private Map<String,List<ChatMsgItemResp>> groupMessageMap = new HashMap<>(512);
+
+
     @Override
     public void save(ChatMsg chatMsg) {
         msgList.add(chatMsg);
         if (msgList.size() > 2000){
             msgList.remove(0);
+        }
+    }
+
+    @Override
+    public void save(ChatMsgItemResp itemR) {
+        List<ChatMsgItemResp> list = groupMessageMap.get(itemR.getGroupId());
+        if (list == null){
+            list = new LinkedList<>();
+            groupMessageMap.put(itemR.getGroupId(),list);
+        }
+        list.add(itemR);
+        if (list.size() > 2000){
+            list.remove(0);
         }
     }
 

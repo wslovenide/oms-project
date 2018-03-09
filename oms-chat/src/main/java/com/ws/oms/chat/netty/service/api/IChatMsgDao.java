@@ -17,6 +17,8 @@ public interface IChatMsgDao {
 
     void save(ChatMsg chatMsg);
 
+    void save(ChatMsgItemResp itemR);
+
     List<ChatMsg> getChatMsg();
 
     List<ChatMsgItemResp> getChatMsgByGroup(String groupId, String sessionId);

@@ -30,7 +30,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
         System.out.println(" message: " + msg.text() + " ,  remote:" + ctx.channel().remoteAddress());
 
         serviceContext.handleMessage(ctx,msg.text());
-
     }
 
 
