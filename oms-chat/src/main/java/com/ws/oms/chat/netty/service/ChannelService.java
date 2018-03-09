@@ -109,6 +109,7 @@ public class ChannelService implements IChannelService {
                         ChatMsgItemResp itemResp = new ChatMsgItemResp();
                         itemResp.setMsg(channelList.size() + "");
                         itemResp.setGroupId(groupId);
+                        chatMsgResp.setCount(channelList.size());
                         chatMsgResp.setMsg(itemResp);
                         TextWebSocketFrame respMsg = new TextWebSocketFrame(JSON.toJSONString(chatMsgResp));
                         if (ch != current){
@@ -136,6 +137,12 @@ public class ChannelService implements IChannelService {
                 }
             });
         }
+    }
+
+    @Override
+    public int getOnlineNumber(String groupId) {
+        List<Channel> channels = groupChannelMap.get(groupId);
+        return channels == null ? 1 : channels.size();
     }
 
     private List<Channel> getOrInitGroupChannelMap(String groupId){

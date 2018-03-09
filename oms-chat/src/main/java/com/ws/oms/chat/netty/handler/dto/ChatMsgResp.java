@@ -11,6 +11,7 @@ package com.ws.oms.chat.netty.handler.dto;
 public class ChatMsgResp extends BaseReq{
 
     private Object msg;
+    private int count;              // 在线人数
     private boolean success = true;
 
     public Object getMsg() {
@@ -29,11 +30,21 @@ public class ChatMsgResp extends BaseReq{
         this.success = success;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     @Override
     public String toString() {
-        return "ChatMsgResp{" +
-                "msg=" + msg +
-                ", success=" + success +
-                "} " + super.toString();
+        final StringBuilder sb = new StringBuilder("ChatMsgResp{");
+        sb.append("msg=").append(msg);
+        sb.append(", count=").append(count);
+        sb.append(", success=").append(success);
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -51,9 +51,8 @@ function chatMessage(jsonMsg) {
 }
 
 function onlineOfflineNotifyMessage(jsonMsg) {
-    console.info(jsonMsg);
-    if (jsonMsg.success && jsonMsg.msg){
-        $("#titleText").text("聊天室(在线" + jsonMsg.msg.msg + ")");
+    if (jsonMsg.success){
+        $("#titleText").text("聊天室(在线" + jsonMsg.count + ")");
     }
 }
 
@@ -63,6 +62,7 @@ function initWebSocketResult(jsonMsg) {
     if (jsonMsg.msg && jsonMsg.msg.length > 0){
         jsonMsg.msg.forEach(chatMessage);
     }
+    onlineOfflineNotifyMessage(jsonMsg);
 }
 
 

@@ -58,6 +58,11 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     }
 
     @Override
+    public int getOnlineNumber(String groupId) {
+        return channelService.getOnlineNumber(groupId);
+    }
+
+    @Override
     public void handleMessage(ChannelHandlerContext ctx, String msg) {
         chatMsgService.handleMessage(ctx,msg);
     }

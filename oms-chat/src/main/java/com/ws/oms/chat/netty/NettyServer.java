@@ -1,6 +1,5 @@
 package com.ws.oms.chat.netty;
 
-import com.ws.oms.chat.netty.handler.MyHttpRequestHandler;
 import com.ws.oms.chat.netty.handler.MyWebSocketHandler;
 import com.ws.oms.chat.netty.service.ServiceContext;
 import io.netty.bootstrap.ServerBootstrap;

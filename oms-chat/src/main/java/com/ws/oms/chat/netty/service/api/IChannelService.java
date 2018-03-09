@@ -16,7 +16,6 @@ import java.util.Map;
  */
 public interface IChannelService {
 
-//    void add(Channel channel);
 
     void attach(Channel channel,String sesionid);
 
@@ -28,5 +27,5 @@ public interface IChannelService {
 
     void broadcastMessage(String sessionId, String groupId ,ChatMsgResp chatMsgResp);
 
-//    Map<ChannelId,Channel> getOnlineChannelMap();
+    int getOnlineNumber(String groupId);
 }

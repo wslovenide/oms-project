@@ -64,6 +64,7 @@ public class ChatMsgService implements IChatMsgService {
         resp.setMsg(chatMsgList);
         resp.setSessionId(baseReq.getSessionId());
         resp.setCommand(Constant.WEB_SOCKET_INIT);
+        resp.setCount(serviceContext.getOnlineNumber(Constant.PUBLIC_GROUP_ID));
 
         ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(resp)));
     }
