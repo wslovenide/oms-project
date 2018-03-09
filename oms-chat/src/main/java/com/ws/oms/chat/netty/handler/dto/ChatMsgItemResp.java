@@ -1,5 +1,7 @@
 package com.ws.oms.chat.netty.handler.dto;
 
+import com.ws.oms.chat.netty.util.DateUtil;
+
 import java.io.Serializable;
 
 /**
@@ -16,7 +18,12 @@ public class ChatMsgItemResp implements Serializable{
     private String dateTime;
     private boolean self = false;
     private String sessionId;
+    private String groupId;
     private String nickName;
+
+    public ChatMsgItemResp(){
+        this.dateTime = DateUtil.getNowTimeStr();
+    }
 
     public String getMsg() {
         return msg;
@@ -58,13 +65,22 @@ public class ChatMsgItemResp implements Serializable{
         this.nickName = nickName;
     }
 
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
     @Override
     public String toString() {
         return "ChatMsgItemResp{" +
-                "msg=" + msg +
+                "msg='" + msg + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", self=" + self +
                 ", sessionId='" + sessionId + '\'' +
+                ", groupId='" + groupId + '\'' +
                 ", nickName='" + nickName + '\'' +
                 '}';
     }

@@ -1,5 +1,6 @@
 package com.ws.oms.chat.netty.service.api;
 
+import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
 
@@ -19,9 +20,13 @@ public interface IChannelService {
 
     void attach(Channel channel,String sesionid);
 
-    String getSessionId(ChannelId channelId);
+    String getSessionId(Channel channel);
 
     Channel remove(Channel channel);
 
-    Map<ChannelId,Channel> getOnlineChannelMap();
+    void broadcastMessage(String sessionId,ChatMsgResp chatMsgResp);
+
+    void broadcastMessage(String sessionId, String groupId ,ChatMsgResp chatMsgResp);
+
+//    Map<ChannelId,Channel> getOnlineChannelMap();
 }

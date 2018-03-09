@@ -85,11 +85,25 @@ public class ChatMsgService implements IChatMsgService {
     private void handleSendMessage(ChannelHandlerContext ctx, String msg){
         SendMessageReq msgReq = JSON.parseObject(msg, SendMessageReq.class);
 
+        // 获取 channel 对应的 sessionId , 分发消息
+        String sessionId = serviceContext.getSessionId(ctx.channel());
 
+        String groupId = msgReq.getGroupId();
+        groupId = StringUtils.isBlank(groupId) ? Constant.PUBLIC_GROUP_ID : groupId;
 
+        ChatMsgResp resp = new ChatMsgResp();
+        resp.setCommand(Constant.SEND_MESSAGE_RESP);
+        resp.setSessionId(sessionId);
 
+        ChatMsgItemResp item = new ChatMsgItemResp();
+        item.setSessionId(sessionId);
+        item.setGroupId(groupId);
+        item.setNickName(sessionId);
+        item.setMsg(msgReq.getMsg());
 
+        resp.setMsg(item);
 
+        serviceContext.broadcastMessage(sessionId,groupId,resp);
     }
 
 }

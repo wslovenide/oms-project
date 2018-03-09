@@ -1,8 +1,8 @@
 package com.ws.oms.chat.netty.service;
 
-import com.ws.oms.chat.netty.handler.dto.BaseReq;
 import com.ws.oms.chat.netty.handler.dto.ChatMsg;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
+import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
 import com.ws.oms.chat.netty.service.api.IChannelService;
 import com.ws.oms.chat.netty.service.api.IChatMsgDao;
 import com.ws.oms.chat.netty.service.api.IChatMsgService;
@@ -11,7 +11,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Description:
@@ -39,7 +38,7 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     }
 
     @Override
-    public String getSessionId(ChannelId channelId) {
+    public String getSessionId(Channel channelId) {
         return channelService.getSessionId(channelId);
     }
 
@@ -49,8 +48,13 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     }
 
     @Override
-    public Map<ChannelId, Channel> getOnlineChannelMap() {
-        return channelService.getOnlineChannelMap();
+    public void broadcastMessage(String sessionId, ChatMsgResp chatMsgResp) {
+        channelService.broadcastMessage(sessionId,chatMsgResp);
+    }
+
+    @Override
+    public void broadcastMessage(String sessionId, String groupId, ChatMsgResp chatMsgResp) {
+        channelService.broadcastMessage(sessionId,groupId,chatMsgResp);
     }
 
     @Override
@@ -60,16 +64,16 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
 
     @Override
     public void save(ChatMsg chatMsg) {
-
+        chatMsgDao.save(chatMsg);
     }
 
     @Override
     public List<ChatMsg> getChatMsg() {
-        return null;
+        return chatMsgDao.getChatMsg();
     }
 
     @Override
     public List<ChatMsgItemResp> getChatMsgByGroup(String groupId, String sessionId) {
-        return null;
+        return chatMsgDao.getChatMsgByGroup(groupId,sessionId);
     }
 }
