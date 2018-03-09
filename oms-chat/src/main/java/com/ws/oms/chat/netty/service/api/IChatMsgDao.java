@@ -1,6 +1,7 @@
 package com.ws.oms.chat.netty.service.api;
 
 import com.ws.oms.chat.netty.handler.dto.ChatMsg;
+import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface IChatMsgDao {
     void save(ChatMsg chatMsg);
 
     List<ChatMsg> getChatMsg();
+
+    List<ChatMsgItemResp> getChatMsgByGroup(String groupId, String sessionId);
+
 }

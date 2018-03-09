@@ -1,6 +1,7 @@
 package com.ws.oms.chat.netty.service;
 
 import com.ws.oms.chat.netty.handler.dto.ChatMsg;
+import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.service.api.IChatMsgDao;
 
 import java.util.ArrayList;
@@ -30,5 +31,10 @@ public class ChatMsgDao implements IChatMsgDao {
     @Override
     public List<ChatMsg> getChatMsg() {
         return msgList;
+    }
+
+    @Override
+    public List<ChatMsgItemResp> getChatMsgByGroup(String groupId, String sessionId) {
+        return null;
     }
 }

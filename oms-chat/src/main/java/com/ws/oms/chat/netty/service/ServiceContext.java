@@ -1,9 +1,13 @@
 package com.ws.oms.chat.netty.service;
 
+import com.ws.oms.chat.netty.handler.dto.BaseReq;
 import com.ws.oms.chat.netty.handler.dto.ChatMsg;
+import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.service.api.IChannelService;
 import com.ws.oms.chat.netty.service.api.IChatMsgDao;
+import com.ws.oms.chat.netty.service.api.IChatMsgService;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
 
 import java.util.List;
@@ -17,20 +21,17 @@ import java.util.Map;
  * @email sheng.wang@chinaredstar.com
  * @date: 2018-03-07 17:09
  */
-public class ServiceContext implements IChannelService, IChatMsgDao{
+public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgDao{
 
     private IChannelService channelService;
     private IChatMsgDao chatMsgDao;
+    private IChatMsgService chatMsgService;
 
     public ServiceContext(){
-        channelService = new ChannelService();
         chatMsgDao = new ChatMsgDao();
+        channelService = new ChannelService();
+        chatMsgService = new ChatMsgService(this);
     }
-//
-//    @Override
-//    public void add(Channel channel) {
-//        channelService.add(channel);
-//    }
 
     @Override
     public void attach(Channel channelId, String sesionid) {
@@ -53,12 +54,22 @@ public class ServiceContext implements IChannelService, IChatMsgDao{
     }
 
     @Override
+    public void handleMessage(ChannelHandlerContext ctx, String msg) {
+        chatMsgService.handleMessage(ctx,msg);
+    }
+
+    @Override
     public void save(ChatMsg chatMsg) {
-        chatMsgDao.save(chatMsg);
+
     }
 
     @Override
     public List<ChatMsg> getChatMsg() {
-        return chatMsgDao.getChatMsg();
+        return null;
+    }
+
+    @Override
+    public List<ChatMsgItemResp> getChatMsgByGroup(String groupId, String sessionId) {
+        return null;
     }
 }
