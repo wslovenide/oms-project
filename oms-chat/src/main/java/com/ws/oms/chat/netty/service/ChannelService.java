@@ -56,7 +56,6 @@ public class ChannelService implements IChannelService {
         ChatMsgResp resp = new ChatMsgResp();
         resp.setCommand(Constant.ONLINE_EVENT);
         resp.setSessionId(sessionId);
-        resp.setMsg(sessionId);
 
         // 广播消息
         broadcastMessage(sessionId,resp,channel);
@@ -75,7 +74,6 @@ public class ChannelService implements IChannelService {
         ChatMsgResp resp = new ChatMsgResp();
         resp.setCommand(Constant.OFFLINE_EVENT);
         resp.setSessionId(sessionId);
-        resp.setMsg(sessionId);
 
         sessionGroupMap.get(sessionId).forEach(group -> {
             Iterator<Channel> iterator = groupChannelMap.get(group).iterator();
@@ -109,6 +107,7 @@ public class ChannelService implements IChannelService {
                         ChatMsgItemResp itemResp = new ChatMsgItemResp();
                         itemResp.setMsg(channelList.size() + "");
                         itemResp.setGroupId(groupId);
+                        itemResp.setNickName(sessionId.split("-")[0]);
                         chatMsgResp.setCount(channelList.size());
                         chatMsgResp.setMsg(itemResp);
                         TextWebSocketFrame respMsg = new TextWebSocketFrame(JSON.toJSONString(chatMsgResp));
