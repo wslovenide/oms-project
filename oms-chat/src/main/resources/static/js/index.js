@@ -49,15 +49,15 @@ function chatMessage(jsonMsg) {
     chatData += "<span class='dateTimeClass'>" + jsonMsg.dateTime + "</span>";
     chatData += "</div>";
 
-    var messageContent =  document.getElementById('messageContent');
-    messageContent.innerHTML +=  chatData;
-
-    messageContent.scrollTop = messageContent.scrollHeight;
+    $(chatData).appendTo("#messageContent");
+    $("#messageContent").scrollTop($("#messageContent")[0].scrollHeight);
 }
 
 function onlineOfflineNotifyMessage(jsonMsg) {
     if (jsonMsg.success){
         $("#titleText").text("聊天室(在线" + jsonMsg.count + ")");
+        var tipMsg = "[" + jsonMsg.sessionId + "]" + (jsonMsg.command == "21" ? "退出房间" : "进入房间");
+        $("<div class='onlineOfflineTip'>" + tipMsg + "</div>").appendTo("#messageContent");
     }
 }
 

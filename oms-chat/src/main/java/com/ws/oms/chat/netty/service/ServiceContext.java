@@ -8,7 +8,6 @@ import com.ws.oms.chat.netty.service.api.IChatMsgDao;
 import com.ws.oms.chat.netty.service.api.IChatMsgService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelId;
 
 import java.util.List;
 
