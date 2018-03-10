@@ -1,5 +1,5 @@
-// var serverUrl = "47.75.15.228:8888";
-var serverUrl = "localhost:8888";
+ var serverUrl = "47.75.15.228:8888";
+//var serverUrl = "localhost:8888";
 var webSocketUrl = serverUrl + "/websocket/chat";
 var ws;
 function initWebsocket() {
@@ -63,12 +63,17 @@ function onlineOfflineNotifyMessage(jsonMsg) {
 }
 
 function initWebSocketResult(jsonMsg) {
-    localStorage.setItem("sessionId",jsonMsg.sessionId);
+    if (jsonMsg.success){
+        localStorage.setItem("sessionId",jsonMsg.sessionId);
 
-    if (jsonMsg.msg && jsonMsg.msg.length > 0){
-        jsonMsg.msg.forEach(chatMessage);
+        if (jsonMsg.msg && jsonMsg.msg.length > 0){
+            jsonMsg.msg.forEach(chatMessage);
+        }
+        $("#titleText").text("聊天室(在线" + jsonMsg.count + ")");
+    }else {
+        alert(jsonMsg.msg);
     }
-    onlineOfflineNotifyMessage(jsonMsg);
+
 }
 
 
