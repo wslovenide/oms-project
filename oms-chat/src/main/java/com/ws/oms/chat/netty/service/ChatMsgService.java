@@ -36,7 +36,6 @@ public class ChatMsgService implements IChatMsgService {
                 break;
 
             case Constant.SEND_MESSAGE:
-
                 handleSendMessage(ctx,msg);
                 break;
 
@@ -99,7 +98,7 @@ public class ChatMsgService implements IChatMsgService {
         ChatMsgItemResp item = new ChatMsgItemResp();
         item.setSessionId(sessionId);
         item.setGroupId(groupId);
-        item.setNickName(sessionId);
+        item.setNickName(sessionId.split("-")[0]);
         item.setMsg(ZhuanYiCharUtil.zhuanYi(msgReq.getMsg()));
 
         resp.setMsg(item);

@@ -58,6 +58,7 @@ function onlineOfflineNotifyMessage(jsonMsg) {
         $("#titleText").text("聊天室(在线" + jsonMsg.count + ")");
         var tipMsg = "[" + jsonMsg.sessionId + "]" + (jsonMsg.command == "21" ? "退出房间" : "进入房间");
         $("<div class='onlineOfflineTip'>" + tipMsg + "</div>").appendTo("#messageContent");
+        $("#messageContent").scrollTop($("#messageContent")[0].scrollHeight);
     }
 }
 
