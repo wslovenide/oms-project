@@ -1,7 +1,5 @@
 package com.ws.oms.chat.netty.handler.dto;
 
-import com.sun.xml.internal.rngom.parse.host.Base;
-
 /**
  * Description:
  *
