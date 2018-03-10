@@ -28,4 +28,6 @@ public interface IChannelService {
     void broadcastMessage(String sessionId, String groupId ,ChatMsgResp chatMsgResp);
 
     int getOnlineNumber(String groupId);
+
+    boolean containsSessionId(String sessionId);
 }

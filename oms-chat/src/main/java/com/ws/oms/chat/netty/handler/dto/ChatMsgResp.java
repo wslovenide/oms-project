@@ -1,5 +1,7 @@
 package com.ws.oms.chat.netty.handler.dto;
 
+import com.sun.xml.internal.rngom.parse.host.Base;
+
 /**
  * Description:
  *
@@ -13,6 +15,14 @@ public class ChatMsgResp extends BaseReq{
     private Object msg;
     private int count;              // 在线人数
     private boolean success = true;
+
+
+    public ChatMsgResp(){}
+
+    public ChatMsgResp(BaseReq baseReq){
+        this.setSessionId(baseReq.getSessionId());
+        this.setCommand(baseReq.getCommand());
+    }
 
     public Object getMsg() {
         return msg;

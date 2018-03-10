@@ -145,6 +145,11 @@ public class ChannelService implements IChannelService {
         return channels == null ? 1 : channels.size();
     }
 
+    @Override
+    public boolean containsSessionId(String sessionId) {
+        return sessionGroupMap.containsKey(sessionId);
+    }
+
     private List<Channel> getOrInitGroupChannelMap(String groupId){
         List<Channel> channelList = groupChannelMap.get(groupId);
         if (channelList == null){

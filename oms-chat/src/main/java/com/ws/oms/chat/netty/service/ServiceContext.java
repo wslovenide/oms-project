@@ -63,6 +63,11 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     }
 
     @Override
+    public boolean containsSessionId(String sessionId) {
+        return channelService.containsSessionId(sessionId);
+    }
+
+    @Override
     public void handleMessage(ChannelHandlerContext ctx, String msg) {
         chatMsgService.handleMessage(ctx,msg);
     }

@@ -17,10 +17,15 @@ function initWebsocket() {
                 case "1":
                     initWebSocketResult(jsonMsg);
                     break;
-                // ONLINE_EVENT,OFFLINE_EVENT
+                // chat message
                 case "11":
+                    if (!jsonMsg.success){
+                        alert(jsonMsg.msg);
+                        return;
+                    }
                     chatMessage(jsonMsg.msg);
                     break;
+                // ONLINE_EVENT,OFFLINE_EVENT
                 case "20":
                 case "21":
                     onlineOfflineNotifyMessage(jsonMsg);

@@ -36,6 +36,7 @@ public class ChatMsgService implements IChatMsgService {
                 break;
 
             case Constant.SEND_MESSAGE:
+
                 handleSendMessage(ctx,msg);
                 break;
 
@@ -55,6 +56,11 @@ public class ChatMsgService implements IChatMsgService {
     private void handleWebSocketInit(ChannelHandlerContext ctx, BaseReq baseReq){
         if (StringUtils.isBlank(baseReq.getSessionId())){
             baseReq.setSessionId(UUID.randomUUID().toString());
+        }else {
+            if (!serviceContext.containsSessionId(baseReq.getSessionId())){
+                baseReq.setSessionId(UUID.randomUUID().toString());
+                // todo 定时删除不存在的sessionId
+            }
         }
         serviceContext.attach(ctx.channel(),baseReq.getSessionId());
 
@@ -72,7 +78,13 @@ public class ChatMsgService implements IChatMsgService {
 
 
     private void handleSendMessage(ChannelHandlerContext ctx, String msg){
+
         SendMessageReq msgReq = JSON.parseObject(msg, SendMessageReq.class);
+
+        // 检查必要的字段
+        if (!handleSendMessagePreCheck(ctx,msgReq)){
+            return;
+        }
 
         // 获取 channel 对应的 sessionId , 分发消息
         String sessionId = serviceContext.getSessionId(ctx.channel());
@@ -95,5 +107,24 @@ public class ChatMsgService implements IChatMsgService {
         serviceContext.broadcastMessage(sessionId,groupId,resp);
         serviceContext.save(item);
     }
+
+    private boolean handleSendMessagePreCheck(ChannelHandlerContext ctx,SendMessageReq msgReq){
+        String errorMsg = null;
+        if (StringUtils.isBlank(msgReq.getSessionId())){
+            errorMsg = "sessionId不能为空!";
+        }else if (!this.serviceContext.containsSessionId(msgReq.getSessionId())){
+            errorMsg = "sessionId不合法!";
+        }
+        if (errorMsg != null){
+            ChatMsgResp resp = new ChatMsgResp(msgReq);
+            resp.setCommand(Constant.SEND_MESSAGE_RESP);
+            resp.setSuccess(false);
+            resp.setMsg(errorMsg);
+            ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(resp)));
+            return false;
+        }
+        return true;
+    }
+
 
 }
