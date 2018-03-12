@@ -1,6 +1,5 @@
 package com.ws.oms.chat.netty.service;
 
-import com.ws.oms.chat.netty.handler.dto.ChatMsg;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
 import com.ws.oms.chat.netty.service.api.IChannelService;
@@ -26,7 +25,8 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     private IChatMsgService chatMsgService;
 
     public ServiceContext(){
-        chatMsgDao = new ChatMsgDao();
+        chatMsgDao = new ChatMsgMapDao();
+//        chatMsgDao = new ChatMsgRedisDao();
         channelService = new ChannelService();
         chatMsgService = new ChatMsgService(this);
     }
@@ -71,20 +71,12 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
         chatMsgService.handleMessage(ctx,msg);
     }
 
-    @Override
-    public void save(ChatMsg chatMsg) {
-        chatMsgDao.save(chatMsg);
-    }
 
     @Override
     public void save(ChatMsgItemResp itemR) {
         chatMsgDao.save(itemR);
     }
 
-    @Override
-    public List<ChatMsg> getChatMsg() {
-        return chatMsgDao.getChatMsg();
-    }
 
     @Override
     public List<ChatMsgItemResp> getChatMsgByGroup(String groupId, String sessionId) {

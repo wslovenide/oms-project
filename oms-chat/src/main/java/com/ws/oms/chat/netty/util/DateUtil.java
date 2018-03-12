@@ -17,4 +17,9 @@ public class DateUtil {
         return sdf.format(new Date());
     }
 
+    public static String getNowDateTimeStr(){
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
+        return sdf.format(new Date());
+    }
+
 }

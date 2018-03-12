@@ -1,5 +1,5 @@
- var serverUrl = "47.75.15.228:8888";
-//var serverUrl = "localhost:8888";
+// var serverUrl = "47.75.15.228:8888";
+var serverUrl = "localhost:8888";
 var webSocketUrl = serverUrl + "/websocket/chat";
 var ws;
 function initWebsocket() {
@@ -46,7 +46,7 @@ function chatMessage(jsonMsg) {
     var chatData = "<div class='"+label+"'>";
     chatData += "<span class='msgClass'>" + jsonMsg.msg + "</span><br/>";
     chatData += "<span class='nickNameClass'>" + jsonMsg.nickName + "</span>";
-    chatData += "<span class='dateTimeClass'>" + jsonMsg.dateTime + "</span>";
+    chatData += "<span class='dateTimeClass'>" + jsonMsg.time + "</span>";
     chatData += "</div>";
 
     $(chatData).appendTo("#messageContent");

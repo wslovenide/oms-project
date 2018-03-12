@@ -1,6 +1,5 @@
 package com.ws.oms.chat.netty.service;
 
-import com.ws.oms.chat.netty.handler.dto.ChatMsg;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.service.api.IChatMsgDao;
 
@@ -15,20 +14,11 @@ import java.util.stream.Collectors;
  * @email sheng.wang@chinaredstar.com
  * @date: 2018-03-07 16:25
  */
-public class ChatMsgDao implements IChatMsgDao {
+public class ChatMsgMapDao implements IChatMsgDao {
 
-    private List<ChatMsg> msgList = new LinkedList<>();
 
     private Map<String,List<ChatMsgItemResp>> groupMessageMap = new HashMap<>(512);
 
-
-    @Override
-    public void save(ChatMsg chatMsg) {
-        msgList.add(chatMsg);
-        if (msgList.size() > 2000){
-            msgList.remove(0);
-        }
-    }
 
     @Override
     public void save(ChatMsgItemResp itemR) {
@@ -43,10 +33,6 @@ public class ChatMsgDao implements IChatMsgDao {
         }
     }
 
-    @Override
-    public List<ChatMsg> getChatMsg() {
-        return msgList;
-    }
 
     @Override
     public List<ChatMsgItemResp> getChatMsgByGroup(String groupId, String sessionId) {
