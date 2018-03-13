@@ -21,7 +21,7 @@ public class RedisUtil {
         String password = properties.getProperty("jedis.password");
 
         System.out.println(host + ", " + timeout + " , " + password);
-        jedisPool = new JedisPool(new JedisPoolConfig(),host,6379,timeout,password);
+        jedisPool = new JedisPool(new JedisPoolConfig(),host,6379);
     }
 
     private static Jedis getResource(){
