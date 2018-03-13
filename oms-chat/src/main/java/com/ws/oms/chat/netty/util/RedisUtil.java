@@ -60,10 +60,4 @@ public class RedisUtil {
         }
         return properties;
     }
-
-    public static void main(String[] args) {
-        Jedis resource = RedisUtil.getResource();
-        System.out.println(resource);
-    }
-
 }
