@@ -14,9 +14,9 @@ import static com.ws.oms.chat.netty.util.RedisUtil.doInJedis;
  */
 public class UserGroupRedisService implements IUserGroupService {
 
-    private static final String GROUP_SESSION_PREFIX = "GROUP_SESSION_PREFIX:";
+    public static final String GROUP_SESSION_PREFIX = "GROUP_SESSION_PREFIX:";
 
-    private static final String SESSION_GROUP_PREFIX = "SESSION_GROUP_PREFIX:";
+    public static final String SESSION_GROUP_PREFIX = "SESSION_GROUP_PREFIX:";
 
     @Override
     public void save(String groupId, String sessionId) {

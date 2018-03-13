@@ -24,4 +24,7 @@ public class Constant {
     // 公共的房间
     public static final String PUBLIC_GROUP_ID = "PUBLIC_GROUP";
 
+
+    public static final String CREATE_GROUP_REQUEST = "40";
+
 }
