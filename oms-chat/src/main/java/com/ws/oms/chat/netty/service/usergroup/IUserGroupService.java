@@ -1,6 +1,7 @@
 package com.ws.oms.chat.netty.service.usergroup;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Description:
@@ -14,8 +15,10 @@ public interface IUserGroupService {
 
     void save(String groupId, String sessionId);
 
-    List<String> getSessionList(String groupId);
+    Set<String> getSessionList(String groupId);
 
-    List<String> getGroupList(String sessionId);
+    Set<String> getGroupList(String sessionId);
+
+    boolean containsSessionId(String sessionId);
 
 }
