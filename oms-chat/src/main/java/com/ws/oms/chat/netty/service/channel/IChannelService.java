@@ -1,10 +1,7 @@
-package com.ws.oms.chat.netty.service.api;
+package com.ws.oms.chat.netty.service.channel;
 
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelId;
-
-import java.util.Map;
 
 /**
  * Description:
@@ -17,15 +14,15 @@ import java.util.Map;
 public interface IChannelService {
 
 
-    void attach(Channel channel,String sesionid);
+    void attach(Channel channel, String sesionid);
 
     String getSessionId(Channel channel);
 
     Channel remove(Channel channel);
 
-    void broadcastMessage(String sessionId,ChatMsgResp chatMsgResp,Channel current);
+    void broadcastMessage(String sessionId, ChatMsgResp chatMsgResp, Channel current);
 
-    void broadcastMessage(String sessionId, String groupId ,ChatMsgResp chatMsgResp);
+    void broadcastMessage(String sessionId, String groupId, ChatMsgResp chatMsgResp);
 
     int getOnlineNumber(String groupId);
 

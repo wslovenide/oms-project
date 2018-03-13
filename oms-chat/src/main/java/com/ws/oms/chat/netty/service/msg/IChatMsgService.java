@@ -1,6 +1,5 @@
-package com.ws.oms.chat.netty.service.api;
+package com.ws.oms.chat.netty.service.msg;
 
-import com.ws.oms.chat.netty.handler.dto.BaseReq;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
@@ -14,6 +13,6 @@ import io.netty.channel.ChannelHandlerContext;
 public interface IChatMsgService {
 
 
-    void  handleMessage(ChannelHandlerContext ctx,String msg);
+    void  handleMessage(ChannelHandlerContext ctx, String msg);
 
 }

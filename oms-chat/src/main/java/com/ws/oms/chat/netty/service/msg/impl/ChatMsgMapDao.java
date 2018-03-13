@@ -1,7 +1,7 @@
-package com.ws.oms.chat.netty.service;
+package com.ws.oms.chat.netty.service.msg.impl;
 
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
-import com.ws.oms.chat.netty.service.api.IChatMsgDao;
+import com.ws.oms.chat.netty.service.msg.IChatMsgDao;
 
 import java.util.*;
 import java.util.stream.Collectors;

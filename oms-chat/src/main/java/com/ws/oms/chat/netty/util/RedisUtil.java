@@ -1,6 +1,5 @@
 package com.ws.oms.chat.netty.util;
 
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -25,7 +24,7 @@ public class RedisUtil {
         jedisPool = new JedisPool(new JedisPoolConfig(),host,6379,timeout,password);
     }
 
-    public static Jedis getResource(){
+    private static Jedis getResource(){
         if (jedisPool == null){
             synchronized (RedisUtil.class){
                 init();
@@ -34,8 +33,17 @@ public class RedisUtil {
         return jedisPool.getResource();
     }
 
-    public static void close(Jedis jedis){
+    private static void close(Jedis jedis){
         jedis.close();
+    }
+
+    public static void doInJedis(JedisTemplete jedisTemplete){
+        Jedis resource = getResource();
+        try {
+            jedisTemplete.doInJedis(resource);
+        }finally {
+            close(resource);
+        }
     }
 
 
@@ -53,7 +61,6 @@ public class RedisUtil {
         }
         return properties;
     }
-
 
     public static void main(String[] args) {
         Jedis resource = RedisUtil.getResource();

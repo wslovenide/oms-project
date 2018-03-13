@@ -1,8 +1,9 @@
-package com.ws.oms.chat.netty.service;
+package com.ws.oms.chat.netty.service.msg.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.ws.oms.chat.netty.handler.dto.*;
-import com.ws.oms.chat.netty.service.api.IChatMsgService;
+import com.ws.oms.chat.netty.service.ServiceContext;
+import com.ws.oms.chat.netty.service.msg.IChatMsgService;
 import com.ws.oms.chat.netty.util.Constant;
 import com.ws.oms.chat.netty.util.ZhuanYiCharUtil;
 import io.netty.channel.ChannelHandlerContext;

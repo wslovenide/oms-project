@@ -2,9 +2,12 @@ package com.ws.oms.chat.netty.service;
 
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
-import com.ws.oms.chat.netty.service.api.IChannelService;
-import com.ws.oms.chat.netty.service.api.IChatMsgDao;
-import com.ws.oms.chat.netty.service.api.IChatMsgService;
+import com.ws.oms.chat.netty.service.channel.IChannelService;
+import com.ws.oms.chat.netty.service.channel.impl.ChannelService;
+import com.ws.oms.chat.netty.service.msg.IChatMsgDao;
+import com.ws.oms.chat.netty.service.msg.IChatMsgService;
+import com.ws.oms.chat.netty.service.msg.impl.ChatMsgMapDao;
+import com.ws.oms.chat.netty.service.msg.impl.ChatMsgService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -18,7 +21,7 @@ import java.util.List;
  * @email sheng.wang@chinaredstar.com
  * @date: 2018-03-07 17:09
  */
-public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgDao{
+public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgDao {
 
     private IChannelService channelService;
     private IChatMsgDao chatMsgDao;
