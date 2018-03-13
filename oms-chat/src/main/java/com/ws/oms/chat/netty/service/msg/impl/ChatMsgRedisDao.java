@@ -19,6 +19,7 @@ public class ChatMsgRedisDao implements IChatMsgDao {
         RedisUtil.doInJedis(redis -> {
             String key = CHAT_MSG_PREFIX + itemR.getGroupId();
             redis.rpush(key,JSON.toJSONString(itemR));
+            return null;
         });
     }
 
@@ -34,6 +35,7 @@ public class ChatMsgRedisDao implements IChatMsgDao {
                 itemResp.setSelf(itemResp.getSessionId().equals(sessionId));
                 respList.add(itemResp);
             }
+            return null;
         });
         return respList;
     }

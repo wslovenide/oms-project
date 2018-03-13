@@ -37,15 +37,14 @@ public class RedisUtil {
         jedis.close();
     }
 
-    public static void doInJedis(JedisTemplete jedisTemplete){
+    public static Object doInJedis(JedisTemplete jedisTemplete){
         Jedis resource = getResource();
         try {
-            jedisTemplete.doInJedis(resource);
+            return jedisTemplete.doInJedis(resource);
         }finally {
             close(resource);
         }
     }
-
 
     private static Properties loadJedisProperties(){
         Properties properties = new Properties();
