@@ -1,6 +1,5 @@
 package com.ws.oms.chat.netty.service.usergroup;
 
-import java.util.List;
 import java.util.Set;
 
 /**
