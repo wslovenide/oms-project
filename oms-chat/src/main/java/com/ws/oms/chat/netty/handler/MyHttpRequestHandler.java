@@ -9,56 +9,62 @@ import com.ws.oms.chat.netty.util.Constant;
 import com.ws.oms.chat.netty.util.RedisUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
 import org.apache.commons.lang3.StringUtils;
+
 import java.nio.charset.Charset;
 import java.util.UUID;
 
 /**
- * Created by gongmei on 2018/3/13.
+ * Created by gongmei on 2018/3/14.
  */
-public class MyHttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-
+public class MyHttpRequestHandler2 extends ChannelInboundHandlerAdapter {
 
     private static final String REQUEST_URL = "/room/create";
 
     private ServiceContext serviceContext;
 
 
-    public MyHttpRequestHandler(ServiceContext serviceContext){
+    public MyHttpRequestHandler2(ServiceContext serviceContext){
         this.serviceContext = serviceContext;
     }
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
-        String uri = request.uri();
-        if (uri.endsWith(REQUEST_URL)){
-            CreateGroupReq validateResult = validateRequest(ctx, request);
-            if (validateResult == null){
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg instanceof FullHttpRequest){
+            FullHttpRequest request = (FullHttpRequest)msg;
+
+            String uri = request.uri();
+            if (uri.endsWith(REQUEST_URL)){
+                CreateGroupReq validateResult = validateRequest(ctx, request);
+                if (validateResult == null){
+                    return;
+                }
+                RedisUtil.doInJedis(redis -> {
+                    String key1 = UserGroupRedisService.SESSION_GROUP_PREFIX + validateResult.getSessionId();
+                    String key2 = UserGroupRedisService.SESSION_GROUP_PREFIX + validateResult.getToSessionId();
+
+                    Long exists = redis.exists(key1, key2);
+                    if (exists == 2){
+                        // 保存session与group的对应关系
+                        String groupId = "GROUP-" + UUID.randomUUID().toString().replaceAll("-","");
+                        serviceContext.save(groupId,validateResult.getSessionId());
+                        serviceContext.save(groupId,validateResult.getToSessionId());
+
+                        // 保持session 与 channel 的对应关系
+                        serviceContext.attachToChannel(groupId,validateResult.getSessionId(),validateResult.getToSessionId());
+                    }
+                    return null;
+                });
                 return;
             }
-            RedisUtil.doInJedis(redis -> {
-                String key1 = UserGroupRedisService.SESSION_GROUP_PREFIX + validateResult.getSessionId();
-                String key2 = UserGroupRedisService.SESSION_GROUP_PREFIX + validateResult.getToSessionId();
-
-                Long exists = redis.exists(key1, key2);
-                if (exists == 2){
-                    // 保存session与group的对应关系
-                    String groupId = "GROUP-" + UUID.randomUUID().toString().replaceAll("-","");
-                    serviceContext.save(groupId,validateResult.getSessionId());
-                    serviceContext.save(groupId,validateResult.getToSessionId());
-
-                    // 保持session 与 channel 的对应关系
-                    serviceContext.attachToChannel(groupId,validateResult.getSessionId(),validateResult.getToSessionId());
-                }
-                return null;
-            });
-        }else {
-            ctx.fireChannelRead(request);
         }
+        super.channelRead(ctx, msg);
     }
+
 
     private void errorResponse(ChannelHandlerContext ctx,String errorMsg){
         ChatMsgResp resp = new ChatMsgResp();
