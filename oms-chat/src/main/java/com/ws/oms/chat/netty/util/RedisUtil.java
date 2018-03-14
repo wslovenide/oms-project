@@ -37,7 +37,7 @@ public class RedisUtil {
         jedis.close();
     }
 
-    public static Object doInJedis(JedisTemplete jedisTemplete){
+    public static <T> T doInJedis(JedisTemplete<T> jedisTemplete){
         Jedis resource = getResource();
         try {
             return jedisTemplete.doInJedis(resource);

@@ -10,7 +10,7 @@ import redis.clients.jedis.Jedis;
  * @email sheng.wang@chinaredstar.com
  * @date: 2018-03-13 13:36
  */
-public interface JedisTemplete {
+public interface JedisTemplete<T> {
 
-    Object doInJedis(Jedis jedis);
+     T doInJedis(Jedis jedis);
 }

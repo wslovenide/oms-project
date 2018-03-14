@@ -31,20 +31,17 @@ public class UserGroupRedisService implements IUserGroupService {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Set<String> getSessionList(String groupId) {
-        return (Set<String>)doInJedis(redis -> redis.smembers(GROUP_SESSION_PREFIX + groupId));
+        return doInJedis(redis -> redis.smembers(GROUP_SESSION_PREFIX + groupId));
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public Set<String> getGroupList(String sessionId) {
-        return (Set<String>)doInJedis(redis -> redis.smembers(SESSION_GROUP_PREFIX + sessionId));
+        return doInJedis(redis -> redis.smembers(SESSION_GROUP_PREFIX + sessionId));
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean containsSessionId(String sessionId) {
-        return (Boolean) doInJedis(redis -> redis.exists(SESSION_GROUP_PREFIX + sessionId));
+        return doInJedis(redis -> redis.exists(SESSION_GROUP_PREFIX + sessionId));
     }
 }
