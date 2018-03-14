@@ -9,10 +9,14 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by gongmei on 2018/3/14.
@@ -41,14 +45,19 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
                 if (validateResult == null){
                     return;
                 }
-                if (serviceContext.containsSessionId(validateResult.getSessionId()) &&
-                    serviceContext.containsSessionId(validateResult.getToSessionId())){
+                String sessionId = validateResult.getSessionId();
+                String toSessionId = validateResult.getToSessionId();
+                if (serviceContext.containsSessionId(sessionId) && serviceContext.containsSessionId(toSessionId)){
+                    List<String> list = Arrays.asList(sessionId, toSessionId);
+                    list.sort(Comparator.naturalOrder());
+                    String orderString = list.stream().collect(Collectors.joining("-"));
+                    String groupId = DigestUtils.md5Hex("GROUP:" + orderString);
 
-                    String groupId = "GROUP-" + UUID.randomUUID().toString().replaceAll("-","");
-                    serviceContext.save(groupId,validateResult.getSessionId());
-                    serviceContext.save(groupId,validateResult.getToSessionId());
-
-                    // 保持session 与 channel 的对应关系
+                    if (!serviceContext.containsGroupId(groupId)){
+                        serviceContext.save(groupId,validateResult.getSessionId());
+                        serviceContext.save(groupId,validateResult.getToSessionId());
+                    }
+                    // 保持 session 与 channel 的对应关系
                     serviceContext.attachToChannel(groupId,validateResult.getSessionId(),validateResult.getToSessionId());
 
                     response(ctx,groupId,true);
