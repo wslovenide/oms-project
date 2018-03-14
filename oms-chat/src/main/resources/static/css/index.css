@@ -63,6 +63,8 @@ body {
 .nickNameClass{
     font-size: 10px;
     margin: auto 2px;
+    cursor: pointer;
+    color: blue;
 }
 .dateTimeClass{
     font-size: 10px;

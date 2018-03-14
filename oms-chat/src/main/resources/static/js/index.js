@@ -47,11 +47,10 @@ function dispatchResponseMsg(jsonMsg) {
 
 function chatMessage(jsonMsg) {
     var label = jsonMsg.self ? "rightMessageLabel" : "leftMessageLabel";
-
     var chatData = "<div class='"+label+"'>";
     chatData += "<span class='msgClass'>" + jsonMsg.msg + "</span><br/>";
-    chatData += "<span class='nickNameClass'>" + jsonMsg.nickName + "</span>";
-    chatData += "<span class='dateTimeClass'>" + jsonMsg.time + "</span>";
+    chatData += "<span class='nickNameClass' onclick='createChatRoom(this);' sessionid='"+ jsonMsg.sessionId +"'>" + jsonMsg.nickName + "</span>";
+    chatData += "<span class='dateTimeClass'><label title='" + jsonMsg.date + "'>" + jsonMsg.time + "</label></span>";
     chatData += "</div>";
 
     $(chatData).appendTo("#messageContent");
@@ -79,7 +78,6 @@ function initWebSocketResult(jsonMsg) {
     }else {
         alert(jsonMsg.msg);
     }
-
 }
 
 
