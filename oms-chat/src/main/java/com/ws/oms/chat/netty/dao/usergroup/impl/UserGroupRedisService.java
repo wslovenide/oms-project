@@ -1,7 +1,10 @@
-package com.ws.oms.chat.netty.service.usergroup.impl;
+package com.ws.oms.chat.netty.dao.usergroup.impl;
 
-import com.ws.oms.chat.netty.service.usergroup.IUserGroupService;
+
+import com.ws.oms.chat.netty.dao.usergroup.IUserGroupService;
+
 import java.util.Set;
+
 import static com.ws.oms.chat.netty.util.RedisUtil.doInJedis;
 
 /**

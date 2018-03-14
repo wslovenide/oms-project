@@ -1,17 +1,15 @@
 package com.ws.oms.chat.netty.service;
 
+import com.ws.oms.chat.netty.dao.msg.IChatMsgDao;
+import com.ws.oms.chat.netty.dao.msg.impl.ChatMsgMapDao;
+import com.ws.oms.chat.netty.dao.usergroup.IUserGroupService;
+import com.ws.oms.chat.netty.dao.usergroup.impl.UserGroupMapService;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
 import com.ws.oms.chat.netty.service.channel.IChannelService;
 import com.ws.oms.chat.netty.service.channel.impl.ChannelService;
-import com.ws.oms.chat.netty.service.msg.IChatMsgDao;
 import com.ws.oms.chat.netty.service.msg.IChatMsgService;
-import com.ws.oms.chat.netty.service.msg.impl.ChatMsgMapDao;
-import com.ws.oms.chat.netty.service.msg.impl.ChatMsgRedisDao;
 import com.ws.oms.chat.netty.service.msg.impl.ChatMsgService;
-import com.ws.oms.chat.netty.service.usergroup.IUserGroupService;
-import com.ws.oms.chat.netty.service.usergroup.impl.UserGroupMapService;
-import com.ws.oms.chat.netty.service.usergroup.impl.UserGroupRedisService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 

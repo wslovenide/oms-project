@@ -219,7 +219,7 @@
 
             html.id = id.toLowerCase() + conf.page;
 
-            // on root?
+            // on room?
             if (!i) {
                 pushClass("root" + conf.section);
             }

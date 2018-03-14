@@ -1,4 +1,4 @@
-package com.ws.oms.chat.netty.service.msg;
+package com.ws.oms.chat.netty.dao.msg;
 
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 

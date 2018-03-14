@@ -1,9 +1,12 @@
-package com.ws.oms.chat.netty.service.msg.impl;
+package com.ws.oms.chat.netty.dao.msg.impl;
 
+import com.ws.oms.chat.netty.dao.msg.IChatMsgDao;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
-import com.ws.oms.chat.netty.service.msg.IChatMsgDao;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**

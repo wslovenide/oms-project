@@ -1,6 +1,7 @@
-package com.ws.oms.chat.netty.service.usergroup.impl;
+package com.ws.oms.chat.netty.dao.usergroup.impl;
 
-import com.ws.oms.chat.netty.service.usergroup.IUserGroupService;
+
+import com.ws.oms.chat.netty.dao.usergroup.IUserGroupService;
 
 import java.util.HashSet;
 import java.util.Map;

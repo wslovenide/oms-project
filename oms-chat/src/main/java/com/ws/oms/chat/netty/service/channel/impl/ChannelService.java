@@ -1,10 +1,10 @@
 package com.ws.oms.chat.netty.service.channel.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.ws.oms.chat.netty.dao.usergroup.IUserGroupService;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
 import com.ws.oms.chat.netty.service.channel.IChannelService;
-import com.ws.oms.chat.netty.service.usergroup.IUserGroupService;
 import com.ws.oms.chat.netty.util.Constant;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;

@@ -1,4 +1,4 @@
-package com.ws.oms.chat.netty.service.usergroup;
+package com.ws.oms.chat.netty.dao.usergroup;
 
 import java.util.Set;
 
