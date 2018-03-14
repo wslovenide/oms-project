@@ -20,4 +20,5 @@ public interface IUserGroupService {
 
     boolean containsSessionId(String sessionId);
 
+    boolean containsGroupId(String groupId);
 }

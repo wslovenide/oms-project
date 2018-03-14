@@ -71,6 +71,7 @@ public class ChatMsgService implements IChatMsgService {
         resp.setMsg(chatMsgList);
         resp.setSessionId(baseReq.getSessionId());
         resp.setCommand(Constant.WEB_SOCKET_INIT);
+        resp.setGroupId(Constant.PUBLIC_GROUP_ID);
         resp.setCount(serviceContext.getOnlineNumber(Constant.PUBLIC_GROUP_ID));
 
         ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(resp)));
@@ -110,10 +111,12 @@ public class ChatMsgService implements IChatMsgService {
 
     private boolean handleSendMessagePreCheck(ChannelHandlerContext ctx,SendMessageReq msgReq){
         String errorMsg = null;
-        if (StringUtils.isBlank(msgReq.getSessionId())){
-            errorMsg = "sessionId不能为空!";
+        if (StringUtils.isAnyBlank(msgReq.getSessionId(),msgReq.getGroupId())){
+            errorMsg = "sessionId或groupId不能为空!";
         }else if (!this.serviceContext.containsSessionId(msgReq.getSessionId())){
             errorMsg = "sessionId不合法!";
+        }else if (!this.serviceContext.containsSessionId(msgReq.getSessionId())){
+            errorMsg = "groupId不合法!";
         }
         if (errorMsg != null){
             ChatMsgResp resp = new ChatMsgResp(msgReq);

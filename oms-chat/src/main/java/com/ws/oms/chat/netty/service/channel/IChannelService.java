@@ -13,7 +13,6 @@ import io.netty.channel.Channel;
  */
 public interface IChannelService {
 
-
     void attach(Channel channel, String sesionid);
 
     String getSessionId(Channel channel);
@@ -27,4 +26,9 @@ public interface IChannelService {
     int getOnlineNumber(String groupId);
 
     boolean containsSessionId(String sessionId);
+
+    /**
+     *  创建一个group后, 需要该group与对应的channel关联
+     */
+    void attachToChannel(String groupId,String... sessionArray);
 }

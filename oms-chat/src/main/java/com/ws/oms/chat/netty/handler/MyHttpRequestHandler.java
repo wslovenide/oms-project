@@ -45,15 +45,20 @@ public class MyHttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRe
 
                 Long exists = redis.exists(key1, key2);
                 if (exists == 2){
-                    String groupId = "GROUP:" + UUID.randomUUID().toString();
-
                     // 保存session与group的对应关系
+                    String groupId = "GROUP-" + UUID.randomUUID().toString().replaceAll("-","");
+                    serviceContext.save(groupId,validateResult.getSessionId());
+                    serviceContext.save(groupId,validateResult.getToSessionId());
+
+                    // 保持session 与 channel 的对应关系
+                    serviceContext.attachToChannel(groupId,validateResult.getSessionId(),validateResult.getToSessionId());
                 }
                 return null;
             });
+        }else {
+            ctx.fireChannelRead(request);
         }
     }
-
 
     private void errorResponse(ChannelHandlerContext ctx,String errorMsg){
         ChatMsgResp resp = new ChatMsgResp();

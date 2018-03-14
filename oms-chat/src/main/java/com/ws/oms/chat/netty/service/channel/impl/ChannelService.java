@@ -22,8 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ChannelService implements IChannelService {
 
-    private final Object groupChannelLock = new Object();
-
     // 每个group里的channel
     private static Map<String,List<Channel>> groupChannelMap = new ConcurrentHashMap<>(512);
 
@@ -43,11 +41,11 @@ public class ChannelService implements IChannelService {
 
         channel.closeFuture().addListener(future -> remove(channel));
 
-        // 保存channel 到公共的房间
-        getOrInitGroupChannelMap(Constant.PUBLIC_GROUP_ID).add(channel);
-
         // 保存 session 到公共的房间
         userGroupService.save(Constant.PUBLIC_GROUP_ID,sessionId);
+
+        // 保存 channel 到 所有的房间
+        activeSessionGroup(channel, sessionId);
 
         ChatMsgResp resp = new ChatMsgResp();
         resp.setCommand(Constant.ONLINE_EVENT);
@@ -148,14 +146,33 @@ public class ChannelService implements IChannelService {
         return this.userGroupService.containsSessionId(sessionId);
     }
 
-    private List<Channel> getOrInitGroupChannelMap(String groupId){
-        List<Channel> channelList = groupChannelMap.get(groupId);
-        if (channelList == null){
-            synchronized (groupChannelLock){
-                channelList = new LinkedList<>();
-                groupChannelMap.put(Constant.PUBLIC_GROUP_ID,channelList);
+    @Override
+    public void attachToChannel(String groupId,String... sessionArray) {
+        List<Channel> list = new ArrayList<>(sessionArray.length);
+        channelSessionMap.forEach((key,value) -> {
+            for (String sessionId : sessionArray){
+                if (sessionId.equals(value)){
+                    list.add(key);
+                }
             }
+        });
+        groupChannelMap.put(groupId,list);
+    }
+
+    /**
+     *  当前用户所有组的channel需要更新为当前的channel
+     */
+    private void activeSessionGroup(Channel channel, String sessionId){
+        Set<String> groupList = userGroupService.getGroupList(sessionId);
+        if (groupList != null && !groupList.isEmpty()){
+            groupList.forEach(groupId -> {
+                List<Channel> channelList = groupChannelMap.get(groupId);
+                if (channelList == null){
+                    channelList = new ArrayList<>();
+                    groupChannelMap.put(groupId,channelList);
+                }
+                channelList.add(channel);
+            });
         }
-        return channelList;
     }
 }

@@ -9,12 +9,14 @@ import com.ws.oms.chat.netty.service.msg.IChatMsgService;
 import com.ws.oms.chat.netty.service.msg.impl.ChatMsgMapDao;
 import com.ws.oms.chat.netty.service.msg.impl.ChatMsgRedisDao;
 import com.ws.oms.chat.netty.service.msg.impl.ChatMsgService;
+import com.ws.oms.chat.netty.service.usergroup.IUserGroupService;
 import com.ws.oms.chat.netty.service.usergroup.impl.UserGroupMapService;
 import com.ws.oms.chat.netty.service.usergroup.impl.UserGroupRedisService;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Description:
@@ -24,17 +26,19 @@ import java.util.List;
  * @email sheng.wang@chinaredstar.com
  * @date: 2018-03-07 17:09
  */
-public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgDao {
+public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgDao,IUserGroupService {
 
     private IChannelService channelService;
     private IChatMsgDao chatMsgDao;
     private IChatMsgService chatMsgService;
+    private IUserGroupService userGroupService;
 
     public ServiceContext(){
-//        chatMsgDao = new ChatMsgMapDao();
-        chatMsgDao = new ChatMsgRedisDao();
-//        channelService = new ChannelService(new UserGroupMapService());
-        channelService = new ChannelService(new UserGroupRedisService());
+        chatMsgDao = new ChatMsgMapDao();
+//        chatMsgDao = new ChatMsgRedisDao();
+//        userGroupService = new UserGroupRedisService();
+        userGroupService = new UserGroupMapService();
+        channelService = new ChannelService(userGroupService);
         chatMsgService = new ChatMsgService(this);
     }
 
@@ -69,8 +73,33 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     }
 
     @Override
+    public void save(String groupId, String sessionId) {
+        userGroupService.save(groupId,sessionId);
+    }
+
+    @Override
+    public Set<String> getSessionList(String groupId) {
+        return userGroupService.getSessionList(groupId);
+    }
+
+    @Override
+    public Set<String> getGroupList(String sessionId) {
+        return userGroupService.getGroupList(sessionId);
+    }
+
+    @Override
     public boolean containsSessionId(String sessionId) {
         return channelService.containsSessionId(sessionId);
+    }
+
+    @Override
+    public boolean containsGroupId(String groupId) {
+        return userGroupService.containsGroupId(groupId);
+    }
+
+    @Override
+    public void attachToChannel(String groupId, String... sessionArray) {
+        channelService.attachToChannel(groupId,sessionArray);
     }
 
     @Override

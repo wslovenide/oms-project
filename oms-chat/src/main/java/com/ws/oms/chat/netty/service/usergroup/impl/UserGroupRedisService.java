@@ -44,4 +44,9 @@ public class UserGroupRedisService implements IUserGroupService {
     public boolean containsSessionId(String sessionId) {
         return doInJedis(redis -> redis.exists(SESSION_GROUP_PREFIX + sessionId));
     }
+
+    @Override
+    public boolean containsGroupId(String groupId) {
+        return doInJedis(redis -> redis.exists(GROUP_SESSION_PREFIX + groupId));
+    }
 }

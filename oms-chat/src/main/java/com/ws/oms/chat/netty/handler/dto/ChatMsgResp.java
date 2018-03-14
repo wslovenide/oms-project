@@ -12,6 +12,7 @@ public class ChatMsgResp extends BaseReq{
 
     private Object msg;
     private int count;              // 在线人数
+    private String groupId;         // 所在组
     private boolean success = true;
 
 
@@ -28,6 +29,14 @@ public class ChatMsgResp extends BaseReq{
 
     public void setMsg(Object msg) {
         this.msg = msg;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     public boolean isSuccess() {

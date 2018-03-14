@@ -54,4 +54,9 @@ public class UserGroupMapService implements IUserGroupService {
     public boolean containsSessionId(String sessionId) {
         return sessionGroupMap.containsKey(sessionId);
     }
+
+    @Override
+    public boolean containsGroupId(String groupId) {
+        return groupSessionMap.containsKey(groupId);
+    }
 }

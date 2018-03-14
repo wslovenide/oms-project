@@ -6,37 +6,42 @@ function initWebsocket() {
     if (window.WebSocket){
         ws = new WebSocket("ws:" + webSocketUrl);
         ws.onopen = function (event) {
-            var item = localStorage.getItem("sessionId");
-            var msg = {command:"1",sessionId:item || ''};
+            var sessionId = localStorage.getItem("sessionId");
+            var groupId = localStorage.getItem("groupId");
+            var msg = {command:"1",sessionId:sessionId || '',groupId:groupId || ''};
             ws.send(JSON.stringify(msg));
         };
         ws.onmessage = function (event) {
             var jsonMsg = JSON.parse(event.data);
-            switch (jsonMsg.command){
-                // webSocket初始化返回
-                case "1":
-                    initWebSocketResult(jsonMsg);
-                    break;
-                // chat message
-                case "11":
-                    if (!jsonMsg.success){
-                        alert(jsonMsg.msg);
-                        return;
-                    }
-                    chatMessage(jsonMsg.msg);
-                    break;
-                // ONLINE_EVENT,OFFLINE_EVENT
-                case "20":
-                case "21":
-                    onlineOfflineNotifyMessage(jsonMsg);
-                    break;
+            if (!jsonMsg.success){
+                alert(jsonMsg.msg);
+                return;
             }
+            dispatchResponseMsg(jsonMsg);
         };
         ws.onclose = function (event) {
             alert("连接已断开,确认后重新连接!");
         };
     }else {
         alert("您的浏览器不支持websocket,请升级!");
+    }
+}
+
+function dispatchResponseMsg(jsonMsg) {
+    switch (jsonMsg.command){
+        // webSocket初始化返回
+        case "1":
+            initWebSocketResult(jsonMsg);
+            break;
+        // chat message
+        case "11":
+            chatMessage(jsonMsg.msg);
+            break;
+        // ONLINE_EVENT,OFFLINE_EVENT
+        case "20":
+        case "21":
+            onlineOfflineNotifyMessage(jsonMsg);
+            break;
     }
 }
 
@@ -65,6 +70,7 @@ function onlineOfflineNotifyMessage(jsonMsg) {
 function initWebSocketResult(jsonMsg) {
     if (jsonMsg.success){
         localStorage.setItem("sessionId",jsonMsg.sessionId);
+        localStorage.setItem("groupId",jsonMsg.groupId);
 
         if (jsonMsg.msg && jsonMsg.msg.length > 0){
             jsonMsg.msg.forEach(chatMessage);
@@ -84,7 +90,8 @@ function sendMessage() {
             return;
         }
         var sessionId = localStorage.getItem("sessionId");
-        var msg = {msg:messageObj.val(),command:"10",sessionId:sessionId || ''};
+        var groupId = localStorage.getItem("groupId");
+        var msg = {msg:messageObj.val(),command:"10",sessionId:sessionId || '',groupId:groupId||''};
         ws.send(JSON.stringify(msg));
         messageObj.val('');
     }
