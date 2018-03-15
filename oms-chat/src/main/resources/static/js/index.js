@@ -62,8 +62,9 @@ function chatMessageDispatch(jsonMsg) {
         $(chatMessageDiv).appendTo(groupEle);
         groupEle.scrollTop(groupEle[0].scrollHeight);
     }else {
-        // private room
-
+        var iframeWin = window[layerObj.find('iframe')[0]['name']];
+        //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+        iframeWin.chatMessage(chatMessageDiv);
     }
 }
 
@@ -91,19 +92,25 @@ function initWebSocketResult(jsonMsg) {
     }
 }
 
-function sendMessage() {
+function sendWebSocketMessage(message) {
     if (ws){
-        var messageObj = $("#message");
-        if (messageObj.val() == ''){
-            return;
-        }
-        var sessionId = localStorage.getItem("sessionId");
-        var groupId = localStorage.getItem("groupId");
-        var msg = {msg:messageObj.val(),command:"10",sessionId:sessionId || '',groupId:groupId||''};
-        ws.send(JSON.stringify(msg));
-        messageObj.val('');
+        ws.send(JSON.stringify(message));
     }
 }
+
+function sendMessage() {
+    var messageObj = $("#message");
+    if (messageObj.val() == ''){
+        return;
+    }
+    var sessionId = localStorage.getItem("sessionId");
+    var groupId = $("div.content").attr("id");
+    var msg = {msg:messageObj.val(),command:"10",sessionId:sessionId || '',groupId:groupId||''};
+    messageObj.val('');
+    sendWebSocketMessage(msg);
+}
+
+
 document.onkeydown = function(event){
     var e = event || window.event;
     if(e && e.keyCode == 13){

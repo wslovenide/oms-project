@@ -3,6 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <link href="css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        function sendMessage() {
+            var messageObj = $("#message");
+            if (messageObj.val() == ''){
+                return;
+            }
+            var contentObj = $("div.content");
+            var sessionId = contentObj.attr("sessionId");
+            var groupId = contentObj.attr("groupId");
+            var msg = {msg:messageObj.val(),command:"10",sessionId:sessionId || '',groupId:groupId||''};
+            messageObj.val('');
+            parent.sendWebSocketMessage(msg);
+        }
+
+        function initSessionGroupId(msg) {
+            var contentObj = $("div.content");
+            contentObj.attr("sessionId",msg.sessionId);
+            contentObj.attr("groupId",msg.groupId);
+            contentObj.attr("toSessionId",msg.toSessionId);
+        }
+
+        function chatMessage(chatMsgDiv) {
+            var chatMsgContent = $("div.content");
+            chatMsgDiv.appendTo(chatMsgContent);
+            chatMsgContent.scrollTop(chatMsgContent[0].scrollHeight);
+        }
+
+        document.onkeydown = function(event){
+            var e = event || window.event;
+            if(e && e.keyCode == 13){
+                sendMessage();
+            }
+        };
+    </script>
 </head>
 <body>
     <div class="container">
@@ -15,6 +50,7 @@
             <input type="text" name="message" id="message">
             <input type="button" value="发送" onclick="sendMessage();">
         </footer>
+
     </div>
 </body>
 </html>

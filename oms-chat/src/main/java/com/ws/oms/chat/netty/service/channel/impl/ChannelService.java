@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChannelService implements IChannelService {
 
     // 每个group里的channel
-    private static Map<String,List<Channel>> groupChannelMap = new ConcurrentHashMap<>(512);
+    private static Map<String,Set<Channel>> groupChannelMap = new ConcurrentHashMap<>(512);
 
     // 当前channel和sessionId 映射
     private static Map<Channel,String> channelSessionMap = new ConcurrentHashMap<>(512);
@@ -98,7 +98,7 @@ public class ChannelService implements IChannelService {
         if (set != null && set.size() > 0){
             set.forEach(groupId -> {
                 // 这个用户所在每一个组均发送消息
-                List<Channel> channelList = groupChannelMap.get(groupId);
+                Set<Channel> channelList = groupChannelMap.get(groupId);
                 if (channelList != null && channelList.size() > 0){
                     channelList.forEach(ch -> {
                         ChatMsgItemResp itemResp = new ChatMsgItemResp();
@@ -121,7 +121,7 @@ public class ChannelService implements IChannelService {
 
     @Override
     public void broadcastMessage(String sessionId, String groupId, ChatMsgResp chatMsgResp) {
-        List<Channel> channelList = groupChannelMap.get(groupId);
+        Set<Channel> channelList = groupChannelMap.get(groupId);
         if (channelList != null && channelList.size() > 0){
             channelList.forEach(ch -> {
                 ChatMsgItemResp itemSelf = (ChatMsgItemResp)chatMsgResp.getMsg();
@@ -137,7 +137,7 @@ public class ChannelService implements IChannelService {
 
     @Override
     public int getOnlineNumber(String groupId) {
-        List<Channel> channels = groupChannelMap.get(groupId);
+        Set<Channel> channels = groupChannelMap.get(groupId);
         return channels == null ? 1 : channels.size();
     }
 
@@ -148,7 +148,7 @@ public class ChannelService implements IChannelService {
 
     @Override
     public void attachToChannel(String groupId,String... sessionArray) {
-        List<Channel> list = new ArrayList<>(sessionArray.length);
+        Set<Channel> list = new HashSet<>(sessionArray.length);
         channelSessionMap.forEach((key,value) -> {
             for (String sessionId : sessionArray){
                 if (sessionId.equals(value)){
@@ -166,9 +166,9 @@ public class ChannelService implements IChannelService {
         Set<String> groupList = userGroupService.getGroupList(sessionId);
         if (groupList != null && !groupList.isEmpty()){
             groupList.forEach(groupId -> {
-                List<Channel> channelList = groupChannelMap.get(groupId);
+                Set<Channel> channelList = groupChannelMap.get(groupId);
                 if (channelList == null){
-                    channelList = new ArrayList<>();
+                    channelList = new HashSet<>();
                     groupChannelMap.put(groupId,channelList);
                 }
                 channelList.add(channel);
