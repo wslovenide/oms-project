@@ -7,8 +7,7 @@ function initWebsocket() {
         ws = new WebSocket("ws:" + webSocketUrl);
         ws.onopen = function (event) {
             var sessionId = localStorage.getItem("sessionId");
-            var groupId = localStorage.getItem("groupId");
-            var msg = {command:"1",sessionId:sessionId || '',groupId:groupId || ''};
+            var msg = {command:"1",sessionId:sessionId || ''};
             ws.send(JSON.stringify(msg));
         };
         ws.onmessage = function (event) {
@@ -35,7 +34,7 @@ function dispatchResponseMsg(jsonMsg) {
             break;
         // chat message
         case "11":
-            chatMessage(jsonMsg.msg);
+            chatMessageDispatch(jsonMsg.msg);
             break;
         // ONLINE_EVENT,OFFLINE_EVENT
         case "20":
@@ -45,16 +44,27 @@ function dispatchResponseMsg(jsonMsg) {
     }
 }
 
-function chatMessage(jsonMsg) {
+function createChatMessageDiv(jsonMsg) {
     var label = jsonMsg.self ? "rightMessageLabel" : "leftMessageLabel";
     var chatData = "<div class='"+label+"'>";
     chatData += "<span class='msgClass'>" + jsonMsg.msg + "</span><br/>";
     chatData += "<span class='nickNameClass' onclick='createChatRoom(this);' sessionid='"+ jsonMsg.sessionId +"'>" + jsonMsg.nickName + "</span>";
     chatData += "<span class='dateTimeClass'><label title='" + jsonMsg.date + "'>" + jsonMsg.time + "</label></span>";
     chatData += "</div>";
+    return chatData;
+}
 
-    $(chatData).appendTo("#PUBLIC_GROUP");
-    $("#messageContent").scrollTop($("#messageContent")[0].scrollHeight);
+function chatMessageDispatch(jsonMsg) {
+    var chatMessageDiv = $(createChatMessageDiv(jsonMsg));
+    var groupEle = $("#" + jsonMsg.groupId);
+    if(groupEle.length > 0){
+        // public room
+        $(chatMessageDiv).appendTo(groupEle);
+        groupEle.scrollTop(groupEle[0].scrollHeight);
+    }else {
+        // private room
+
+    }
 }
 
 function onlineOfflineNotifyMessage(jsonMsg) {
@@ -70,16 +80,16 @@ function initWebSocketResult(jsonMsg) {
     if (jsonMsg.success){
         localStorage.setItem("sessionId",jsonMsg.sessionId);
         localStorage.setItem("groupId",jsonMsg.groupId);
+        $("div.content").attr("id",jsonMsg.groupId);
 
         if (jsonMsg.msg && jsonMsg.msg.length > 0){
-            jsonMsg.msg.forEach(chatMessage);
+            jsonMsg.msg.forEach(chatMessageDispatch);
         }
         $("#titleText").text("聊天室(在线" + jsonMsg.count + ")");
     }else {
         alert(jsonMsg.msg);
     }
 }
-
 
 function sendMessage() {
     if (ws){
