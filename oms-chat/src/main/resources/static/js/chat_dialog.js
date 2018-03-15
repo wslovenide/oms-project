@@ -25,7 +25,6 @@ function createChatRoom(ele) {
             end: function(){
                 // 关闭时会触发
                 // layer.tips('Hi', '#about', {tips: 1});
-                layerIndex = null;
             }
         });
     });

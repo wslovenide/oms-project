@@ -53,7 +53,7 @@ function chatMessage(jsonMsg) {
     chatData += "<span class='dateTimeClass'><label title='" + jsonMsg.date + "'>" + jsonMsg.time + "</label></span>";
     chatData += "</div>";
 
-    $(chatData).appendTo("#messageContent");
+    $(chatData).appendTo("#PUBLIC_GROUP");
     $("#messageContent").scrollTop($("#messageContent")[0].scrollHeight);
 }
 
@@ -61,8 +61,8 @@ function onlineOfflineNotifyMessage(jsonMsg) {
     if (jsonMsg.success){
         $("#titleText").text("聊天室(在线" + jsonMsg.count + ")");
         var tipMsg = "[" + jsonMsg.msg.nickName + "]" + (jsonMsg.command == "21" ? "退出房间" : "进入房间");
-        $("<div class='onlineOfflineTip'>" + tipMsg + "</div>").appendTo("#messageContent");
-        $("#messageContent").scrollTop($("#messageContent")[0].scrollHeight);
+        $("<div class='onlineOfflineTip'>" + tipMsg + "</div>").appendTo("#PUBLIC_GROUP");
+        $("#PUBLIC_GROUP").scrollTop($("#PUBLIC_GROUP")[0].scrollHeight);
     }
 }
 
