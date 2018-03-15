@@ -13,4 +13,5 @@ import redis.clients.jedis.Jedis;
 public interface JedisTemplete<T> {
 
      T doInJedis(Jedis jedis);
+
 }

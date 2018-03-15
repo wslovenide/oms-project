@@ -30,7 +30,6 @@ public class RoomService implements IRoomService{
     @Override
     public ChatMsgResp createChatRoom(String requestBody) {
         ChatMsgResp resp = new ChatMsgResp();
-
         CreateGroupReq validateResult = validateRequest(requestBody,resp);
         if (validateResult == null){
             resp.setSuccess(false);
@@ -60,7 +59,6 @@ public class RoomService implements IRoomService{
 
 
     private CreateGroupReq validateRequest(String requestBody,ChatMsgResp resp){
-        System.out.println("请求的数据为: " + requestBody);
         try {
             CreateGroupReq createGroupReq = JSON.parseObject(requestBody, CreateGroupReq.class);
             if (StringUtils.isAnyBlank(createGroupReq.getSessionId(),createGroupReq.getCommand(),createGroupReq.getToSessionId())){
