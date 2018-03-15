@@ -2,6 +2,9 @@ var httpRequestUrl = "http://" + serverUrl;
 var layerIndex;
 var layerObj;
 function createChatRoom(ele) {
+    if (layerObj != null){
+        return;
+    }
     var toSessionId = $(ele).attr("sessionId");
     var sessionId = localStorage.getItem("sessionId");
     var data = {sessionId:sessionId||'',toSessionId:toSessionId||'',command:"40"};
@@ -35,6 +38,7 @@ function createChatRoom(ele) {
                 // 关闭时会触发
                 // layer.tips('Hi', '#about', {tips: 1});
                 layerIndex = null;
+                layerObj = null;
             }
         });
     });
