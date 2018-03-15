@@ -9,8 +9,21 @@ function createChatRoom(ele) {
             alert(resp.msg);
             return;
         }
-        var groupId = resp.msg;
-
-
+        layer.ready(function(){
+            layer.open({
+                id:resp.msg,
+                type: 2,
+                title: $(ele).text(),
+                maxmin: true,
+                shade: false,
+                area: ['600px', '400px'],
+                content: ['../static/chat_window.html','no'],
+                end: function(){
+                    // 关闭时会触发
+                    // layer.tips('Hi', '#about', {tips: 1});
+                }
+            });
+        });
     });
 }
+
