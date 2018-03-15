@@ -61,19 +61,16 @@ function chatMessageDispatch(jsonMsg) {
 }
 
 function onlineOfflineNotifyMessage(jsonMsg) {
-    console.info(jsonMsg);
     if (jsonMsg.success){
         $("#titleText").text("聊天室(在线" + jsonMsg.count + ")");
         var tipMsg = "[" + jsonMsg.msg.nickName + "]" + (jsonMsg.command == "21" ? "退出房间" : "进入房间");
         var messageDiv = $("<div class='onlineOfflineTip'>" + tipMsg + "</div>");
         publicOrChatBoxMessage(jsonMsg.msg.groupId,messageDiv);
-        // $("#PUBLIC_GROUP").scrollTop($("#PUBLIC_GROUP")[0].scrollHeight);
     }
 }
 
 
 function publicOrChatBoxMessage(groupId,chatMessageDiv) {
-    console.info(groupId);
     var groupEle = $("#" + groupId);
     if(groupEle.length > 0){
         // public room
