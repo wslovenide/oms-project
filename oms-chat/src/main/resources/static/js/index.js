@@ -78,6 +78,7 @@ function onlineOfflineNotifyMessage(jsonMsg) {
         var tipMsg = "[" + jsonMsg.msg.nickName + "]" + (jsonMsg.command == "21" ? "退出房间" : "进入房间");
         var messageDiv = $("<div class='onlineOfflineTip'>" + tipMsg + "</div>");
         publicOrChatBoxMessage(jsonMsg.msg.groupId,messageDiv);
+        showCurrentOnlineUser(jsonMsg.ext);
     }
 }
 
@@ -89,9 +90,11 @@ function publicOrChatBoxMessage(groupId,chatMessageDiv) {
         $(chatMessageDiv).appendTo(groupEle);
         groupEle.scrollTop(groupEle[0].scrollHeight);
     }else {
-        var iframeWin = window[layerObj.find('iframe')[0]['name']];
-        //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-        iframeWin.chatMessage(chatMessageDiv);
+        if (layerObj){
+            var iframeWin = window[layerObj.find('iframe')[0]['name']];
+            //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+            iframeWin.chatMessage(chatMessageDiv);
+        }
     }
 }
 
@@ -106,10 +109,29 @@ function initWebSocketResult(jsonMsg) {
             jsonMsg.msg.forEach(chatMessageDispatch);
         }
         $("#titleText").text("聊天室(在线" + jsonMsg.count + ")");
+
+        showCurrentOnlineUser(jsonMsg.ext);
+
     }else {
         alert(jsonMsg.msg);
     }
 }
+
+function showCurrentOnlineUser(onlineArray) {
+    if (onlineArray && onlineArray.length > 0){
+        var divs = "";
+        for (var i = 0; i < onlineArray.length; i++){
+            var div = "<div class='onlineLabel' title='当前在线' onclick='createChatRoom(this);' sessionId = '" + onlineArray[i].sessionId +"'>";
+            div += onlineArray[i].nickName;
+            div += "</div>";
+            divs += div;
+        }
+        var onlineContent = $("div.onlineInfoContent");
+        onlineContent.html('');
+        $(divs).appendTo(onlineContent);
+    }
+}
+
 
 function sendWebSocketMessage(message) {
     if (ws){

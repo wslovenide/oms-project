@@ -1,7 +1,11 @@
 package com.ws.oms.chat.netty.service.channel;
 
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
+import com.ws.oms.chat.netty.handler.dto.OnlineInfoResp;
 import io.netty.channel.Channel;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Description:
@@ -24,6 +28,10 @@ public interface IChannelService {
     void broadcastMessage(String sessionId, String groupId, ChatMsgResp chatMsgResp);
 
     int getOnlineNumber(String groupId);
+
+    Set<String> getOnlineSessionIds();
+
+    List<OnlineInfoResp> getOnlineInfoList();
 
     boolean containsSessionId(String sessionId);
 

@@ -14,6 +14,7 @@ public class ChatMsgResp extends BaseReq{
     private int count;              // 在线人数
     private String groupId;         // 所在组
     private boolean success = true;
+    private Object ext;
 
 
     public ChatMsgResp(){}
@@ -53,6 +54,14 @@ public class ChatMsgResp extends BaseReq{
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public Object getExt() {
+        return ext;
+    }
+
+    public void setExt(Object ext) {
+        this.ext = ext;
     }
 
     @Override

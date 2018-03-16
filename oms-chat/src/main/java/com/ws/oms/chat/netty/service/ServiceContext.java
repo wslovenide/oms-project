@@ -6,6 +6,7 @@ import com.ws.oms.chat.netty.dao.usergroup.IUserGroupService;
 import com.ws.oms.chat.netty.dao.usergroup.impl.UserGroupMapService;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
+import com.ws.oms.chat.netty.handler.dto.OnlineInfoResp;
 import com.ws.oms.chat.netty.service.channel.IChannelService;
 import com.ws.oms.chat.netty.service.channel.impl.ChannelService;
 import com.ws.oms.chat.netty.service.msg.IChatMsgService;
@@ -68,6 +69,16 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     @Override
     public int getOnlineNumber(String groupId) {
         return channelService.getOnlineNumber(groupId);
+    }
+
+    @Override
+    public Set<String> getOnlineSessionIds() {
+        return channelService.getOnlineSessionIds();
+    }
+
+    @Override
+    public List<OnlineInfoResp> getOnlineInfoList() {
+        return channelService.getOnlineInfoList();
     }
 
     @Override

@@ -76,3 +76,19 @@ body {
     color: gainsboro;
     font-size: 10px;
 }
+.onlineInfoContent{
+    clear: both;
+    width:80%;
+    left: 10%;
+    font-size: 10px;
+    text-align: center;
+    position: fixed;
+}
+div.onlineLabel{
+    margin-left: 3px;
+    margin-right: 3px;
+    display: inline-block;
+    line-height: 1.5em;
+    color: blue;
+    cursor: pointer;
+}
