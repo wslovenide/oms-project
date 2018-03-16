@@ -24,7 +24,10 @@ function createChatRoom(ele) {
             content: ['../static/chat_window.html','no'],
             success:function (layero, index) {
                 // 打开窗口后回调
-                // console.info(ws); 查询聊天记录
+                // 查询历史记录
+                var msg = {command:"30",sessionId:sessionId || '',groupId:resp.msg};
+                ws.send(JSON.stringify(msg));
+
                 // layer.setTop(layero); // 再次点击时置顶
                 layerIndex = index;
                 layerObj = layero;

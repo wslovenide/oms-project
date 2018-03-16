@@ -41,6 +41,9 @@ function dispatchResponseMsg(jsonMsg) {
         case "21":
             onlineOfflineNotifyMessage(jsonMsg);
             break;
+        case "31":
+            queryChatHistoryResp(jsonMsg);
+            break;
     }
 }
 
@@ -58,6 +61,16 @@ function chatMessageDispatch(jsonMsg) {
     var chatMessageDiv = $(createChatMessageDiv(jsonMsg));
     publicOrChatBoxMessage(jsonMsg.groupId,chatMessageDiv);
 
+}
+
+function queryChatHistoryResp(jsonMsg) {
+    if (jsonMsg.success){
+        if (jsonMsg.msg && jsonMsg.msg.length > 0){
+            jsonMsg.msg.forEach(chatMessageDispatch);
+        }
+    }else {
+        alert(jsonMsg.msg);
+    }
 }
 
 function onlineOfflineNotifyMessage(jsonMsg) {

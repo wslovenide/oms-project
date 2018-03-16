@@ -35,13 +35,11 @@ public class ChatMsgService implements IChatMsgService {
             case Constant.WEB_SOCKET_INIT:
                 handleWebSocketInit(ctx,baseReq);
                 break;
-
             case Constant.SEND_MESSAGE:
                 handleSendMessage(ctx,msg);
                 break;
-
             case Constant.QUERY_CHAT_HISTORY:
-
+                queryHistoryChatMessage(ctx,msg);
                 break;
             default:
                 ChatMsgResp resp = new ChatMsgResp();
@@ -74,6 +72,17 @@ public class ChatMsgService implements IChatMsgService {
         resp.setGroupId(Constant.PUBLIC_GROUP_ID);
         resp.setCount(serviceContext.getOnlineNumber(Constant.PUBLIC_GROUP_ID));
 
+        ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(resp)));
+    }
+
+    private void queryHistoryChatMessage(ChannelHandlerContext ctx, String msg){
+        QueryChatHistoryReq msgReq = JSON.parseObject(msg, QueryChatHistoryReq.class);
+        List<ChatMsgItemResp> chatMsgList = serviceContext.getChatMsgByGroup(msgReq.getGroupId(),msgReq.getSessionId());
+        ChatMsgResp resp = new ChatMsgResp();
+        resp.setMsg(chatMsgList);
+        resp.setSessionId(msgReq.getSessionId());
+        resp.setGroupId(msgReq.getGroupId());
+        resp.setCommand(Constant.QUERY_CHAT_HISTORY_RESP);
         ctx.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(resp)));
     }
 
