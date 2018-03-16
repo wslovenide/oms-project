@@ -19,7 +19,7 @@ function createChatRoom(ele) {
             title: $(ele).text(),
             maxmin: true,
             shade: false,
-            area: ['600px', '400px'],
+            area: ['90%', '80%'],
             zIndex: layer.zIndex,
             content: ['../static/chat_window.html','no'],
             success:function (layero, index) {

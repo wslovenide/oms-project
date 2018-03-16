@@ -60,7 +60,6 @@ function createChatMessageDiv(jsonMsg) {
 function chatMessageDispatch(jsonMsg) {
     var chatMessageDiv = $(createChatMessageDiv(jsonMsg));
     publicOrChatBoxMessage(jsonMsg.groupId,chatMessageDiv);
-
 }
 
 function queryChatHistoryResp(jsonMsg) {
