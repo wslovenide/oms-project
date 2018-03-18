@@ -50,7 +50,7 @@ function dispatchResponseMsg(jsonMsg) {
 function createChatMessageDiv(jsonMsg) {
     var label = jsonMsg.self ? "rightMessageLabel" : "leftMessageLabel";
     var chatData = "<div class='"+label+"'>";
-    chatData += "<span class='nickNameClass' onclick=createChatRoom("+"'"+jsonMsg.sessionId+"','"+ jsonMsg.nickName +"');>" + jsonMsg.nickName + ":</span>";
+    chatData += "<span class='nickNameClass' sessionId='"+jsonMsg.sessionId+"' nickName='"+jsonMsg.nickName+"' onclick='createChatRoom(this);'>" + jsonMsg.nickName + ":</span>";
     chatData += "<span class='msgClass'>" + jsonMsg.msg + "</span>";
     chatData += "<span class='dateTimeClass'>(<label title='" + jsonMsg.date + "'>" + jsonMsg.time + "</label>)</span>";
     chatData += "</div>";
@@ -61,8 +61,8 @@ function chatMessageDispatch(jsonMsg,isRealTimeChat) {
     var chatMessageDiv = $(createChatMessageDiv(jsonMsg));
     publicOrChatBoxMessage(jsonMsg.groupId,chatMessageDiv);
 
-    if (isRealTimeChat && isRealTimeChat == 'true'){
-        var data = "<div style='cursor: pointer;' onclick=createChatRoom("+"'"+jsonMsg.sessionId+"','"+jsonMsg.nickName+"');>你有新的消息,点击查看</div>";
+    if (isRealTimeChat && isRealTimeChat == 'true' && !jsonMsg.self){
+        var data = "<div style='cursor: pointer;' sessionId='"+jsonMsg.sessionId+"' nickName='"+jsonMsg.nickName+"' onclick='createChatRoom(this);'>你有新的消息,点击查看</div>";
         layer.msg(data, {
             id:"1",
             offset: 't',
@@ -131,7 +131,7 @@ function showCurrentOnlineUser(onlineArray) {
     if (onlineArray && onlineArray.length > 0){
         var divs = "";
         for (var i = 0; i < onlineArray.length; i++){
-            var div = "<div class='onlineLabel' title='当前在线' onclick=createChatRoom("+"'"+onlineArray[i].sessionId+"','"+onlineArray[i].nickName+"');>";
+            var div = "<div class='onlineLabel' sessionId='"+onlineArray[i].sessionId+"' nickName='"+onlineArray[i].nickName+"' title='当前在线' onclick='createChatRoom(this);'>";
             div += onlineArray[i].nickName;
             div += "</div>";
             divs += div;
