@@ -1,5 +1,5 @@
-// var serverUrl = "47.75.15.228:8888";
-var serverUrl = "localhost:8888";
+var serverUrl = "47.75.15.228:8888";
+// var serverUrl = "localhost:8888";
 var webSocketUrl = serverUrl + "/websocket/chat";
 var ws;
 function initWebsocket() {
@@ -34,7 +34,7 @@ function dispatchResponseMsg(jsonMsg) {
             break;
         // chat message
         case "11":
-            chatMessageDispatch(jsonMsg.msg);
+            chatMessageDispatch(jsonMsg.msg,'true');
             break;
         // ONLINE_EVENT,OFFLINE_EVENT
         case "20":
@@ -50,16 +50,26 @@ function dispatchResponseMsg(jsonMsg) {
 function createChatMessageDiv(jsonMsg) {
     var label = jsonMsg.self ? "rightMessageLabel" : "leftMessageLabel";
     var chatData = "<div class='"+label+"'>";
-    chatData += "<span class='msgClass'>" + jsonMsg.msg + "</span><br/>";
-    chatData += "<span class='nickNameClass' onclick='createChatRoom(this);' sessionid='"+ jsonMsg.sessionId +"'>" + jsonMsg.nickName + "</span>";
-    chatData += "<span class='dateTimeClass'><label title='" + jsonMsg.date + "'>" + jsonMsg.time + "</label></span>";
+    chatData += "<span class='nickNameClass' onclick=createChatRoom("+"'"+jsonMsg.sessionId+"','"+ jsonMsg.nickName +"');>" + jsonMsg.nickName + ":</span>";
+    chatData += "<span class='msgClass'>" + jsonMsg.msg + "</span>";
+    chatData += "<span class='dateTimeClass'>(<label title='" + jsonMsg.date + "'>" + jsonMsg.time + "</label>)</span>";
     chatData += "</div>";
     return chatData;
 }
 
-function chatMessageDispatch(jsonMsg) {
+function chatMessageDispatch(jsonMsg,isRealTimeChat) {
     var chatMessageDiv = $(createChatMessageDiv(jsonMsg));
     publicOrChatBoxMessage(jsonMsg.groupId,chatMessageDiv);
+
+    if (isRealTimeChat && isRealTimeChat == 'true'){
+        var data = "<div style='cursor: pointer;' onclick=createChatRoom("+"'"+jsonMsg.sessionId+"','"+jsonMsg.nickName+"');>你有新的消息,点击查看</div>";
+        layer.msg(data, {
+            id:"1",
+            offset: 't',
+            anim: 6,
+            time: 7000
+        });
+    }
 }
 
 function queryChatHistoryResp(jsonMsg) {
@@ -121,7 +131,7 @@ function showCurrentOnlineUser(onlineArray) {
     if (onlineArray && onlineArray.length > 0){
         var divs = "";
         for (var i = 0; i < onlineArray.length; i++){
-            var div = "<div class='onlineLabel' title='当前在线' onclick='createChatRoom(this);' sessionId = '" + onlineArray[i].sessionId +"'>";
+            var div = "<div class='onlineLabel' title='当前在线' onclick=createChatRoom("+"'"+onlineArray[i].sessionId+"','"+onlineArray[i].nickName+"');>";
             div += onlineArray[i].nickName;
             div += "</div>";
             divs += div;

@@ -1,11 +1,10 @@
 var httpRequestUrl = "http://" + serverUrl;
 var layerIndex;
 var layerObj;
-function createChatRoom(ele) {
+function createChatRoom(toSessionId,nickName) {
     if (layerObj != null){
         return;
     }
-    var toSessionId = $(ele).attr("sessionId");
     var sessionId = localStorage.getItem("sessionId");
     var data = {sessionId:sessionId||'',toSessionId:toSessionId||'',command:"40"};
     $.post(httpRequestUrl + "/room/create",JSON.stringify(data),function (resp) {
@@ -16,7 +15,7 @@ function createChatRoom(ele) {
         layer.open({
             id:"GROUP" + resp.msg,
             type: 2,
-            title: $(ele).text(),
+            title: nickName,
             maxmin: true,
             shade: false,
             area: ['90%', '80%'],

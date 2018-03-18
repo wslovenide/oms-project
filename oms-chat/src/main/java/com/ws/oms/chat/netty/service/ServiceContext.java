@@ -2,8 +2,10 @@ package com.ws.oms.chat.netty.service;
 
 import com.ws.oms.chat.netty.dao.msg.IChatMsgDao;
 import com.ws.oms.chat.netty.dao.msg.impl.ChatMsgMapDao;
+import com.ws.oms.chat.netty.dao.msg.impl.ChatMsgRedisDao;
 import com.ws.oms.chat.netty.dao.usergroup.IUserGroupService;
 import com.ws.oms.chat.netty.dao.usergroup.impl.UserGroupMapService;
+import com.ws.oms.chat.netty.dao.usergroup.impl.UserGroupRedisService;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
 import com.ws.oms.chat.netty.handler.dto.OnlineInfoResp;
@@ -33,10 +35,10 @@ public class ServiceContext implements IChannelService,IChatMsgService,IChatMsgD
     private IUserGroupService userGroupService;
 
     public ServiceContext(){
-        chatMsgDao = new ChatMsgMapDao();
-//        chatMsgDao = new ChatMsgRedisDao();
-//        userGroupService = new UserGroupRedisService();
-        userGroupService = new UserGroupMapService();
+//        chatMsgDao = new ChatMsgMapDao();
+        chatMsgDao = new ChatMsgRedisDao();
+        userGroupService = new UserGroupRedisService();
+//        userGroupService = new UserGroupMapService();
         channelService = new ChannelService(userGroupService);
         chatMsgService = new ChatMsgService(this);
     }
