@@ -184,12 +184,7 @@ public class ChannelService implements IChannelService {
         Set<String> groupList = userGroupService.getGroupList(sessionId);
         if (groupList != null && !groupList.isEmpty()){
             groupList.forEach(groupId -> {
-                Set<Channel> channelList = groupChannelMap.get(groupId);
-                if (channelList == null){
-                    channelList = new HashSet<>();
-                    groupChannelMap.put(groupId,channelList);
-                }
-                channelList.add(channel);
+                groupChannelMap.putIfAbsent(groupId,new HashSet<>()).add(channel);
             });
         }
     }

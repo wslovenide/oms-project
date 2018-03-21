@@ -26,19 +26,8 @@ public class UserGroupMapService implements IUserGroupService {
 
     @Override
     public void save(String groupId, String sessionId) {
-        Set<String> groupSet = sessionGroupMap.get(sessionId);
-        if (groupSet == null){
-            groupSet = new HashSet<>();
-            sessionGroupMap.put(sessionId,groupSet);
-        }
-        groupSet.add(groupId);
-
-        Set<String> sessionSet = groupSessionMap.get(groupId);
-        if (sessionSet == null){
-            sessionSet = new HashSet<>();
-            groupSessionMap.put(groupId,sessionSet);
-        }
-        sessionSet.add(sessionId);
+        sessionGroupMap.putIfAbsent(sessionId,new HashSet<>()).add(groupId);
+        groupSessionMap.putIfAbsent(groupId,new HashSet<>()).add(sessionId);
     }
 
     @Override
