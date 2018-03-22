@@ -13,6 +13,8 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Description:
@@ -23,6 +25,8 @@ import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketSe
  * @date: 2018-02-27 14:09
  */
 public class NettyServer {
+
+    private Logger logger = LoggerFactory.getLogger(NettyServer.class);
 
     private int port = 8888;
 
@@ -48,7 +52,7 @@ public class NettyServer {
             }
         });
         try {
-            System.out.println("启动服务，端口为：" + port + " , url : " + webSocketUrl);
+            logger.info("启动服务，端口为：" + port + " , url : " + webSocketUrl);
             serverBootstrap.bind(port).sync().channel().closeFuture().sync();
         }catch (Exception e){
             e.printStackTrace();
