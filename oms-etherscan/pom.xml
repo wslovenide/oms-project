@@ -55,5 +55,9 @@
 
     </dependencies>
 
+    <build>
+        <finalName>etherscan</finalName>
+
+    </build>
 
 </project>

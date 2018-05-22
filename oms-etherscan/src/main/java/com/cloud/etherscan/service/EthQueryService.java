@@ -6,6 +6,7 @@ import com.cloud.etherscan.model.EthHolderDetail;
 import com.cloud.etherscan.tool.HtmlParserUtil;
 import com.cloud.etherscan.tool.URLEncoderUtil;
 import com.cloud.etherscan.tool.http.HttpTookit;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -32,7 +33,7 @@ import java.util.concurrent.Executors;
 @Service
 public class EthQueryService {
 
-    private static ExecutorService threadPool = Executors.newFixedThreadPool(30);
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(20);
 
     private Logger logger = LoggerFactory.getLogger(EthQueryService.class);
 
@@ -145,13 +146,16 @@ public class EthQueryService {
         BigDecimal divide5 = top500.multiply(multi).divide(totalToken, 2, BigDecimal.ROUND_HALF_UP);
 
         try {
-            String date = new SimpleDateFormat("MM月dd日").format(new Date());
+            String date = new SimpleDateFormat("MM月dd日HH时mm分").format(new Date());
 
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = workbook.createSheet(date);
 
             HSSFRow row = sheet.createRow(0);
-            row.createCell(1).setCellValue(ethName+"持有数据汇总("+date+")");
+            HSSFCell cell = row.createCell(1);
+            cell.setCellValue(ethName+"持有数据汇总("+date+")");
+
+
             row.createCell(2).setCellValue("数量");
             row.createCell(3).setCellValue("占比");
 
@@ -213,6 +217,11 @@ public class EthQueryService {
 
             }
             File file = new File(new File(savePath),ethName+date+".xlsx");
+
+
+            sheet.autoSizeColumn(1);
+            sheet.autoSizeColumn(2);
+            sheet.autoSizeColumn(3);
 
             workbook.write(file);
             workbook.close();
