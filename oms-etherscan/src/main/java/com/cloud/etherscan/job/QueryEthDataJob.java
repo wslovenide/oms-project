@@ -6,9 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,17 +38,15 @@ public class QueryEthDataJob {
     @Scheduled(cron = "*/30 * * * * ?")
     public void queryEth(){
         try {
-//            if (!validateTokenFile()){
-//                return;
-//            }
-//            List<String> list = Files.readAllLines(Paths.get(filePath), Charset.forName("UTF-8"));
-//            logger.info("待抓取的token有:{}",list);
-//            if (CollectionUtils.isEmpty(list)){
-//                logger.info("待抓取的token为空!");
-//                return;
-//            }
-            List<String> list = new ArrayList<>();
-            list.add("eos");
+            if (!validateTokenFile()){
+                return;
+            }
+            List<String> list = Files.readAllLines(Paths.get(filePath), Charset.forName("UTF-8"));
+            logger.info("待抓取的token有:{}",list);
+            if (CollectionUtils.isEmpty(list)){
+                logger.info("待抓取的token为空!");
+                return;
+            }
             ethService.queryTokenByName(list);
         }catch (Exception e){
             logger.error("抓取数据出错!",e);
