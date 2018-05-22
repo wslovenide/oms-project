@@ -247,7 +247,7 @@ public class EthQueryService {
                 return HtmlParserUtil.parseTokenDetail(doGet);
             }
         }catch (Exception e){
-            logger.error("查询分页数据出错！ param = " + param + " , i = " + i,e);
+            logger.error("查询分页数据出错！ethHandlerHost = " + ethHandlerHost +",  param = " + param + " , i = " + i,e);
         }
         return null;
     }
