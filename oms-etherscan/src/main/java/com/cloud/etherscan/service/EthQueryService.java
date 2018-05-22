@@ -51,6 +51,9 @@ public class EthQueryService {
 
     public void queryTokenByName(List<String> names){
         for (String name : names){
+            if (name == null || name.trim().length() < 1){
+                continue;
+            }
             name = name.trim();
             String url = ethSearchHandlerHost + "?term=" + URLEncoderUtil.urlEncode(name);
             try {
