@@ -2,6 +2,8 @@ package com.cloud.etherscan.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.cloud.etherscan.model.EthHolderDetail;
+import com.cloud.etherscan.tool.HtmlParserUtil;
 import com.cloud.etherscan.tool.URLEncoderUtil;
 import com.cloud.etherscan.tool.http.HttpTookit;
 import org.slf4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -24,12 +27,11 @@ import java.util.concurrent.Executors;
  * @date: 2018-05-22 10:31
  */
 @Service
-public class EthService {
+public class EthQueryService {
 
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(30);
 
-    private static ExecutorService threadPool = Executors.newFixedThreadPool(10);
-
-    private Logger logger = LoggerFactory.getLogger(EthService.class);
+    private Logger logger = LoggerFactory.getLogger(EthQueryService.class);
 
     @Value("${eth.token.host}")
     private String ethHost;
@@ -81,16 +83,34 @@ public class EthService {
         Map<String,String> param = new HashMap<>();
         param.put("a",token);
         param.put("s","1000000000000000000000000000");
-        for (int i = 1 ; i <= 10;){
+
+        List<EthHolderDetail> all = new LinkedList<>();
+        for (int i = 1 ; i <= 10; i++){
             param.put("p",String.valueOf(i));
-            String doGet = HttpTookit.doGet(ethHandlerHost, param);
-            if (doGet == null || "".equalsIgnoreCase(doGet.trim())){
-                continue;
+            List<EthHolderDetail> list = queryEthTokenWithRetry(param);
+            if (list != null){
+                all.addAll(list);
             }
-            i++;
+
         }
     }
 
+    public List<EthHolderDetail> queryEthTokenWithRetry(Map<String,String> param){
+        int i = 0;
+        try {
+            while (i < 3){
+                String doGet = HttpTookit.doGet(ethHandlerHost, param);
+                if (doGet == null || "".equalsIgnoreCase(doGet.trim())){
+                    i++;
+                    continue;
+                }
+                return HtmlParserUtil.parseTokenDetail(doGet);
+            }
+        }catch (Exception e){
+            logger.error("查询分页数据出错！ param = " + param + " , i = " + i,e);
+        }
+        return null;
+    }
 
 
 }

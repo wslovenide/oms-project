@@ -49,4 +49,14 @@ public class EthHolderDetail {
     public void setPercentage(String percentage) {
         this.percentage = percentage;
     }
+
+    @Override
+    public String toString() {
+        return "EthHolderDetail{" +
+                "token='" + token + '\'' +
+                ", address='" + address + '\'' +
+                ", quantity='" + quantity + '\'' +
+                ", percentage='" + percentage + '\'' +
+                '}';
+    }
 }

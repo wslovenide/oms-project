@@ -1,6 +1,6 @@
 package com.cloud.etherscan.job;
 
-import com.cloud.etherscan.service.EthService;
+import com.cloud.etherscan.service.EthQueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ public class QueryEthDataJob {
     private String filePath;
 
     @Resource
-    private EthService ethService;
+    private EthQueryService ethService;
 
     @Scheduled(cron = "*/30 * * * * ?")
     public void queryEth(){
