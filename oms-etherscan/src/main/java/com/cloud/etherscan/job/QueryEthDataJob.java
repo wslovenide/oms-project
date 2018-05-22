@@ -38,15 +38,17 @@ public class QueryEthDataJob {
     @Scheduled(cron = "*/30 * * * * ?")
     public void queryEth(){
         try {
-            if (!validateTokenFile()){
-                return;
-            }
-            List<String> list = Files.readAllLines(Paths.get(filePath), Charset.forName("UTF-8"));
-            logger.info("待抓取的token有:{}",list);
-            if (CollectionUtils.isEmpty(list)){
-                logger.info("待抓取的token为空!");
-                return;
-            }
+//            if (!validateTokenFile()){
+//                return;
+//            }
+//            List<String> list = Files.readAllLines(Paths.get(filePath), Charset.forName("UTF-8"));
+//            logger.info("待抓取的token有:{}",list);
+//            if (CollectionUtils.isEmpty(list)){
+//                logger.info("待抓取的token为空!");
+//                return;
+//            }
+            List<String> list = new ArrayList<>();
+            list.add("eos");
             ethService.queryTokenByName(list);
         }catch (Exception e){
             logger.error("抓取数据出错!",e);

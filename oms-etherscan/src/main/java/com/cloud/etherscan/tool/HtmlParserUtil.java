@@ -4,6 +4,7 @@ import com.cloud.etherscan.model.EthHolderDetail;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -56,5 +57,18 @@ public class HtmlParserUtil {
         return list;
     }
 
+
+    public static String parseTokenCount(String html){
+        try {
+            Document document = Jsoup.parse(html);
+            Elements select = document.select("td[class=tditem]");
+            Iterator<Element> iterator = select.iterator();
+            Element next = iterator.next();
+            return next.text().split(" ")[0].replaceAll(",","");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
