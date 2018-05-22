@@ -51,6 +51,7 @@ public class EthQueryService {
 
     public void queryTokenByName(List<String> names){
         for (String name : names){
+            name = name.trim();
             String url = ethSearchHandlerHost + "?term=" + URLEncoderUtil.urlEncode(name);
             try {
                 Map<String,String> param = new HashMap<>();
@@ -58,7 +59,6 @@ public class EthQueryService {
                 String get = HttpTookit.doGet(ethSearchHandlerHost, param);
                 if (get != null && !"".equals(get.trim())){
                     JSONArray jsonArray = JSON.parseArray(get);
-                    System.out.println(jsonArray);
                     if (jsonArray.size() == 0){
                         continue;
                     }
@@ -72,7 +72,8 @@ public class EthQueryService {
                         }else {
                             fullName = split[0];
                         }
-                        if (fullName.trim().equalsIgnoreCase(name.trim())){
+                        if (fullName.trim().equalsIgnoreCase(name)){
+                            logger.info("开始抓取[{}]的明细数据!",name);
                             threadPool.submit(() -> {
                                 queryEthTokenList(split[1],fullName);
                             } );
