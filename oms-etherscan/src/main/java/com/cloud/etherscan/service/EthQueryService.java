@@ -49,9 +49,13 @@ public class EthQueryService {
     @Value("${eth.token.save.path}")
     private String savePath;
 
+    private List<String> errList;
+
     public void queryTokenByName(List<String> names){
-        List<Future> list = new ArrayList<>(names.size());
-        for (String name : names){
+        String[] toArray = names.toArray(new String[0]);
+        errList = new ArrayList<>();
+        List<Future> list = new ArrayList<>(toArray.length);
+        for (String name : toArray){
             if (name == null || name.trim().length() < 1){
                 continue;
             }
@@ -103,7 +107,10 @@ public class EthQueryService {
     public void queryEthTokenList(String token,String ethName){
         // 查询总数
         String[] tokenCount = getTotalCount(token);
-
+        if (tokenCount == null){
+            errList.add(ethName);
+            return;
+        }
         // 查询前500条明细
         Map<String,String> param = new HashMap<>();
         param.put("a",token);
@@ -121,11 +128,16 @@ public class EthQueryService {
         }
         if (all.size() != 500){
             logger.info("抓取{}明细数据失败! ",ethName);
+            errList.add(ethName);
             return;
         }
         calculateStatistic(all,tokenCount[0],ethName);
 
         System.out.println("生成 [" + ethName +"] 完成");
+        if (errList.size() > 0){
+            logger.info("执行失败的列表有: {} , 开始重新执行.....",errList);
+            queryTokenByName(errList);
+        }
     }
 
 
@@ -163,14 +175,15 @@ public class EthQueryService {
         BigDecimal divide5 = top500.multiply(multi).divide(totalToken, 2, BigDecimal.ROUND_HALF_UP);
 
         try {
-            String date = new SimpleDateFormat("MM月dd日HH时mm分").format(new Date());
+            String dateTime = new SimpleDateFormat("MM月dd日HH时mm分").format(new Date());
+            String date = new SimpleDateFormat("MM月dd日").format(new Date());
 
             HSSFWorkbook workbook = new HSSFWorkbook();
-            HSSFSheet sheet = workbook.createSheet(date);
+            HSSFSheet sheet = workbook.createSheet(dateTime);
 
             HSSFRow row = sheet.createRow(0);
             HSSFCell cell = row.createCell(1);
-            cell.setCellValue(ethName+"持有数据汇总("+date+")");
+            cell.setCellValue(ethName+"持有数据汇总("+dateTime+")");
 
 
             row.createCell(2).setCellValue("数量");
@@ -233,7 +246,8 @@ public class EthQueryService {
                 row10.createCell(3).setCellValue(detail.getPercentage());
 
             }
-            File file = new File(new File(savePath),ethName+date+".xls");
+            String path = savePath+File.pathSeparator + ethName + File.separator + date;
+            File file = new File(new File(path),ethName+dateTime+".xls");
 
             sheet.autoSizeColumn(1);
             sheet.autoSizeColumn(2);
@@ -246,10 +260,6 @@ public class EthQueryService {
             logger.error("生成文件出错!",e);
         }
     }
-
-
-
-
 
     public List<EthHolderDetail> queryEthTokenWithRetry(Map<String,String> param,String ethName){
         int i = 0;
