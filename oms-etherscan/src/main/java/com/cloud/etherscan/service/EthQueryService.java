@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -255,7 +254,7 @@ public class EthQueryService {
     public List<EthHolderDetail> queryEthTokenWithRetry(Map<String,String> param,String ethName){
         int i = 0;
         try {
-            while (i < 3){
+            while (i < 5){
                 String doGet = HttpTookit.doGet(ethHandlerHost, param);
                 if (doGet == null || "".equalsIgnoreCase(doGet.trim())){
                     i++;
@@ -263,6 +262,10 @@ public class EthQueryService {
                 }
                 List<EthHolderDetail> list = HtmlParserUtil.parseTokenDetail(doGet);
                 logger.info("查询{}明细，第{}次的结果条数为:{}, url = {}, param = {}",ethName,i+1,list.size(),ethHandlerHost,param);
+                if (list.isEmpty()){
+                    i++;
+                    continue;
+                }
                 return list;
             }
         }catch (Exception e){
@@ -276,7 +279,7 @@ public class EthQueryService {
         int i = 0;
         String url = ethHost + "/" + token;
         try {
-            while (i < 3){
+            while (i < 5){
                 String doGet = HttpTookit.doGet(url, new HashMap<>());
                 if (doGet == null || "".equalsIgnoreCase(doGet.trim())){
                     i++;
