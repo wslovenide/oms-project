@@ -35,7 +35,7 @@ public class QueryEthDataJob {
     @Resource
     private EthQueryService ethService;
 
-    @Scheduled(initialDelay = 10,fixedDelay = 1000000)
+    @Scheduled(initialDelay = 2000,fixedDelay = 20*60*1000)
     public void queryEth(){
         try {
             if (!validateTokenFile()){
@@ -47,8 +47,6 @@ public class QueryEthDataJob {
                 logger.info("待抓取的token为空!");
                 return;
             }
-//            List<String> list = new ArrayList<>();
-//            list.add("eos");
             ethService.queryTokenByName(list);
         }catch (Exception e){
             logger.error("抓取数据出错!",e);
