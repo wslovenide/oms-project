@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Description:
@@ -33,7 +34,7 @@ import java.util.concurrent.Executors;
 @Service
 public class EthQueryService {
 
-    private static ExecutorService threadPool = Executors.newFixedThreadPool(20);
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(1);
 
     private Logger logger = LoggerFactory.getLogger(EthQueryService.class);
 
@@ -50,6 +51,7 @@ public class EthQueryService {
     private String savePath;
 
     public void queryTokenByName(List<String> names){
+        List<Future> list = new ArrayList<>(names.size());
         for (String name : names){
             if (name == null || name.trim().length() < 1){
                 continue;
@@ -77,9 +79,9 @@ public class EthQueryService {
                         }
                         if (fullName.trim().equalsIgnoreCase(name)){
                             logger.info("开始抓取[{}]的明细数据!",name);
-                            threadPool.submit(() -> {
+                            list.add(threadPool.submit(() -> {
                                 queryEthTokenList(split[1],fullName);
-                            } );
+                            } ));
                             break;
                         }
                     }
@@ -88,31 +90,43 @@ public class EthQueryService {
                 logger.error("根据名称查询token失败! url = "+url+",  name = "+name,e);
             }
         }
+
+        for (Future future : list){
+            try {
+                future.get();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        logger.info("全部执行完成!");
     }
 
     public void queryEthTokenList(String token,String ethName){
+        // 查询总数
+        String[] tokenCount = getTotalCount(token);
 
         // 查询前500条明细
         Map<String,String> param = new HashMap<>();
         param.put("a",token);
-        param.put("s","1000000000000000000000000000");
+        param.put("s",tokenCount[1]);
 
         List<EthHolderDetail> all = new LinkedList<>();
         for (int i = 1 ; i <= 10; i++){
             param.put("p",String.valueOf(i));
-            List<EthHolderDetail> list = queryEthTokenWithRetry(param);
+            List<EthHolderDetail> list = queryEthTokenWithRetry(param,ethName);
             if (list != null){
                 all.addAll(list);
+            }else {
+                break;
             }
         }
-
-        // 查询总数
-        String tokenCount = getTotalCount(token);
-
-        calculateStatistic(all,tokenCount,ethName);
+        if (all.size() != 500){
+            logger.info("抓取{}明细数据失败! ",ethName);
+            return;
+        }
+        calculateStatistic(all,tokenCount[0],ethName);
 
         System.out.println("生成 [" + ethName +"] 完成");
-
     }
 
 
@@ -220,8 +234,7 @@ public class EthQueryService {
                 row10.createCell(3).setCellValue(detail.getPercentage());
 
             }
-            File file = new File(new File(savePath),ethName+date+".xlsx");
-
+            File file = new File(new File(savePath),ethName+date+".xls");
 
             sheet.autoSizeColumn(1);
             sheet.autoSizeColumn(2);
@@ -230,6 +243,7 @@ public class EthQueryService {
             workbook.write(file);
             workbook.close();
         }catch (Exception e){
+            e.printStackTrace();
             logger.error("生成文件出错!",e);
         }
     }
@@ -238,7 +252,7 @@ public class EthQueryService {
 
 
 
-    public List<EthHolderDetail> queryEthTokenWithRetry(Map<String,String> param){
+    public List<EthHolderDetail> queryEthTokenWithRetry(Map<String,String> param,String ethName){
         int i = 0;
         try {
             while (i < 3){
@@ -247,16 +261,18 @@ public class EthQueryService {
                     i++;
                     continue;
                 }
-                return HtmlParserUtil.parseTokenDetail(doGet);
+                List<EthHolderDetail> list = HtmlParserUtil.parseTokenDetail(doGet);
+                logger.info("查询{}明细，第{}次的结果条数为:{}, url = {}, param = {}",ethName,i+1,list.size(),ethHandlerHost,param);
+                return list;
             }
         }catch (Exception e){
-            logger.error("查询分页数据出错！ethHandlerHost = " + ethHandlerHost +",  param = " + param + " , i = " + i,e);
+            logger.error("查询分页数据出错！ethHandlerHost = " + ethHandlerHost +",  param = " + param + " , i = " + i + " , ethName = " + ethName,e);
         }
         return null;
     }
 
 
-    public String getTotalCount(String token){
+    public String[] getTotalCount(String token){
         int i = 0;
         String url = ethHost + "/" + token;
         try {

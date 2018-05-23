@@ -58,13 +58,33 @@ public class HtmlParserUtil {
     }
 
 
-    public static String parseTokenCount(String html){
+    public static String[] parseTokenCount(String html){
         try {
             Document document = Jsoup.parse(html);
             Elements select = document.select("td[class=tditem]");
             Iterator<Element> iterator = select.iterator();
             Element next = iterator.next();
-            return next.text().split(" ")[0].replaceAll(",","");
+            String tokenCount = next.text().split(" ")[0].replaceAll(",","");
+
+            Iterator<Element> script = document.getElementsByTag("script").iterator();
+            String s = null;
+            while (script.hasNext()){
+                if (s != null){
+                    break;
+                }
+                Element next1 = script.next();
+                String string = next1.toString();
+                if (string.contains("function")){
+                    String[] split = string.split("\r\n");
+                    for (String str : split){
+                        if (str.contains("tokeholdersiframe")){
+                            s = str.substring(str.lastIndexOf("=")+1,str.length()-2);
+                            break;
+                        }
+                    }
+                }
+            }
+            return new String[]{tokenCount,s};
         }catch (Exception e){
             e.printStackTrace();
         }

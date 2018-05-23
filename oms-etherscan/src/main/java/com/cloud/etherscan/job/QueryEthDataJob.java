@@ -35,7 +35,7 @@ public class QueryEthDataJob {
     @Resource
     private EthQueryService ethService;
 
-    @Scheduled(cron = "*/30 * * * * ?")
+    @Scheduled(initialDelay = 10,fixedDelay = 1000000)
     public void queryEth(){
         try {
             if (!validateTokenFile()){
