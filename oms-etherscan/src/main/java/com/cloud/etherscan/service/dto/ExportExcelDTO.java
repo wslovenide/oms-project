@@ -20,7 +20,6 @@ public class ExportExcelDTO {
     private BigDecimal top200;
     private BigDecimal top500;
 
-
     private BigDecimal top10Rate;
     private BigDecimal top20Rate;
     private BigDecimal top50Rate;
@@ -28,6 +27,7 @@ public class ExportExcelDTO {
     private BigDecimal top200Rate;
     private BigDecimal top500Rate;
 
+    private boolean perDay;
 
     public ExportExcelDTO() {
     }
@@ -93,6 +93,14 @@ public class ExportExcelDTO {
 
     public BigDecimal getTop200() {
         return top200;
+    }
+
+    public boolean isPerDay() {
+        return perDay;
+    }
+
+    public void setPerDay(boolean perDay) {
+        this.perDay = perDay;
     }
 
     public void setTop200(BigDecimal top200) {

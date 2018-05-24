@@ -37,21 +37,39 @@ public class QueryEthDataJob {
 
     @Scheduled(initialDelay = 2000,fixedDelay = 20*60*1000)
     public void queryEth(){
+        List<String> fileContent = getFileContent();
+        if (!CollectionUtils.isEmpty(fileContent)){
+            ethService.queryTokenByName(fileContent,false);
+        }
+    }
+
+    public void queryEthWithPerDay(){
+        List<String> fileContent = getFileContent();
+        if (!CollectionUtils.isEmpty(fileContent)){
+            ethService.queryTokenByName(fileContent,true);
+        }
+    }
+
+    private List<String> getFileContent(){
         try {
             if (!validateTokenFile()){
-                return;
+                return null;
             }
             List<String> list = Files.readAllLines(Paths.get(filePath), Charset.forName("UTF-8"));
             logger.info("待抓取的token有:{}",list);
             if (CollectionUtils.isEmpty(list)){
                 logger.info("待抓取的token为空!");
-                return;
+                return null;
             }
-            ethService.queryTokenByName(list);
+            return list;
         }catch (Exception e){
             logger.error("抓取数据出错!",e);
         }
+        return null;
     }
+
+
+
 
     private boolean validateTokenFile(){
         logger.info("token的文件路径为:{}",filePath);

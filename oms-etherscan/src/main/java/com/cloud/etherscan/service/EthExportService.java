@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Queue;
 
 /**
  * Created by gongmei on 2018/5/23.
@@ -23,9 +22,7 @@ import java.util.Queue;
 @Service
 public class EthExportService {
 
-
     private Logger logger = LoggerFactory.getLogger(EthExportService.class);
-
 
     @Value("${eth.token.save.path}")
     private String savePath;
@@ -58,10 +55,8 @@ public class EthExportService {
             HSSFCell cell = row.createCell(1);
             cell.setCellValue(excelDTO.getEthName()+"持有数据汇总("+dateTime+")");
 
-
             row.createCell(2).setCellValue("数量");
             row.createCell(3).setCellValue("占比");
-
 
             HSSFRow row1 = sheet.createRow(1);
             row1.createCell(1).setCellValue("发行总量");
@@ -73,18 +68,15 @@ public class EthExportService {
             row2.createCell(2).setCellValue(excelDTO.getTop10().toString());
             row2.createCell(3).setCellValue(excelDTO.getTop10Rate().toString()+"%");
 
-
             HSSFRow row3 = sheet.createRow(3);
             row3.createCell(1).setCellValue("TOP20持有量");
             row3.createCell(2).setCellValue(excelDTO.getTop20().toString());
             row3.createCell(3).setCellValue(excelDTO.getTop20Rate().toString()+"%");
 
-
             HSSFRow row4 = sheet.createRow(4);
             row4.createCell(1).setCellValue("TOP50持有量");
             row4.createCell(2).setCellValue(excelDTO.getTop50().toString());
             row4.createCell(3).setCellValue(excelDTO.getTop50Rate().toString()+"%");
-
 
             HSSFRow row5 = sheet.createRow(5);
             row5.createCell(1).setCellValue("TOP100持有量");
@@ -101,7 +93,6 @@ public class EthExportService {
             row7.createCell(2).setCellValue(excelDTO.getTop500().toString());
             row7.createCell(3).setCellValue(excelDTO.getTop500Rate().toString()+"%");
 
-
             HSSFRow row9 = sheet.createRow(9);
             row9.createCell(0).setCellValue("排名");
             row9.createCell(1).setCellValue("持有者地址");
@@ -117,7 +108,6 @@ public class EthExportService {
                 row10.createCell(1).setCellValue(detail.getAddress());
                 row10.createCell(2).setCellValue(detail.getQuantity());
                 row10.createCell(3).setCellValue(detail.getPercentage());
-
             }
             String fileName = excelDTO.getEthName()+"-"+dateTime+".xls";
             File file = new File(new File(filePath),fileName);
