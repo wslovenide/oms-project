@@ -109,7 +109,12 @@ public class EthExportService {
                 row10.createCell(2).setCellValue(detail.getQuantity());
                 row10.createCell(3).setCellValue(detail.getPercentage());
             }
-            String fileName = excelDTO.getEthName()+"-"+dateTime+".xls";
+            String fileName;
+            if (excelDTO.isPerDay()){
+                fileName = excelDTO.getEthName()+"-"+date+".xls";
+            }else {
+                fileName = excelDTO.getEthName()+"-"+dateTime+".xls";
+            }
             File file = new File(new File(filePath),fileName);
 
             sheet.autoSizeColumn(1);
@@ -127,7 +132,13 @@ public class EthExportService {
     }
 
     private void saveDayStatistic(ExportExcelDTO excelDTO,String filePath,String date,String time) throws Exception{
-        String fileName = excelDTO.getEthName()+"-"+date+".xls";
+        String fileName = excelDTO.getEthName()+"-"+date+"-日汇总.xls";
+        if (excelDTO.isPerDay()){
+            filePath = savePath+ "/" + excelDTO.getEthName().trim();
+            String dateMonth = new SimpleDateFormat("yyyy年MM月").format(new Date());
+            fileName = excelDTO.getEthName().trim() + dateMonth + "汇总.xls";
+            time = date;
+        }
         File file = new File(filePath,fileName);
         if (file.exists()){
             HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(file));

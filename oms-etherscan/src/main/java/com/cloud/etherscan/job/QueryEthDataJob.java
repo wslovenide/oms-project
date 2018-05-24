@@ -35,7 +35,7 @@ public class QueryEthDataJob {
     @Resource
     private EthQueryService ethService;
 
-    @Scheduled(initialDelay = 2000,fixedDelay = 20*60*1000)
+    @Scheduled(cron = "${eth.cron.minites}")
     public void queryEth(){
         List<String> fileContent = getFileContent();
         if (!CollectionUtils.isEmpty(fileContent)){
@@ -43,6 +43,7 @@ public class QueryEthDataJob {
         }
     }
 
+    @Scheduled(cron = "${eth.cron.daily}")
     public void queryEthWithPerDay(){
         List<String> fileContent = getFileContent();
         if (!CollectionUtils.isEmpty(fileContent)){
