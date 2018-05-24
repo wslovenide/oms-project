@@ -180,7 +180,6 @@ public class EthQueryService {
         BigDecimal divide4 = top200.multiply(multi).divide(totalToken, 2, BigDecimal.ROUND_HALF_UP);
         BigDecimal divide5 = top500.multiply(multi).divide(totalToken, 2, BigDecimal.ROUND_HALF_UP);
 
-
         ExportExcelDTO excelDTO = new ExportExcelDTO();
         excelDTO.setEthName(ethName);
         excelDTO.setTotalCount(totalCount);
