@@ -157,8 +157,11 @@ public class EthExportService {
             sheetAt.getRow(5).createCell(lastCellNum).setCellValue(excelDTO.getTop200Rate().toString()+"%");
             sheetAt.getRow(6).createCell(lastCellNum).setCellValue(excelDTO.getTop500Rate().toString()+"%");
 
-            ethChartService.createChartToExcel(workbook);
-
+            try {
+                ethChartService.createChartToExcel(workbook);
+            }catch (Exception e){
+                logger.error("生成图片出错!" , e);
+            }
             workbook.write(file);
             workbook.close();
         }else {
