@@ -124,6 +124,7 @@ public class EthChartService {
             y1 = 23;
             y2 = 33;
         }
+        // TODO: 2018-05-25   图片会重复叠加上去
         HSSFSheet sheet = workbook.getSheetAt(0);
         HSSFPatriarch patriarch = sheet.createDrawingPatriarch();
         HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 255, 255,(short) firstX, y1, (short) secondX, y2);
