@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,9 @@ public class EthExportService {
 
     @Value("${eth.token.save.path}")
     private String savePath;
+
+    @Resource
+    private EthChartService ethChartService;
 
     public void saveToExcel(ExportExcelDTO excelDTO){
         String date = new SimpleDateFormat("MM月dd日").format(new Date());
@@ -152,6 +156,9 @@ public class EthExportService {
             sheetAt.getRow(4).createCell(lastCellNum).setCellValue(excelDTO.getTop100Rate().toString()+"%");
             sheetAt.getRow(5).createCell(lastCellNum).setCellValue(excelDTO.getTop200Rate().toString()+"%");
             sheetAt.getRow(6).createCell(lastCellNum).setCellValue(excelDTO.getTop500Rate().toString()+"%");
+
+            ethChartService.createChartToExcel(workbook);
+
             workbook.write(file);
             workbook.close();
         }else {
