@@ -9,9 +9,6 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.nio.charset.Charset;
 
 /**
@@ -19,9 +16,8 @@ import java.nio.charset.Charset;
  */
 public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
 
-    private Logger logger = LoggerFactory.getLogger(MyHttpRequestHandler.class);
-
     private static final String CREATE_CHAT_ROOM_URL = "/room/create";
+
 
     private IRoomService roomService;
 
@@ -34,10 +30,10 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
         if (msg instanceof FullHttpRequest){
             FullHttpRequest request = (FullHttpRequest)msg;
             String uri = request.uri();
-            logger.info("请求的URL为 ： " + uri);
+            System.out.println("请求的URL为 ： " + uri);
 
             String requestBody = request.content().toString(Charset.forName("utf-8"));
-            logger.info("请求的数据为: " + requestBody);
+            System.out.println("请求的数据为: " + requestBody);
             Object result = null;
             switch (uri){
                 case CREATE_CHAT_ROOM_URL:
@@ -57,7 +53,7 @@ public class MyHttpRequestHandler extends ChannelInboundHandlerAdapter {
 
     private void response(ChannelHandlerContext ctx, Object message){
         String msg = JSON.toJSONString(message);
-        logger.info("返回给前段的数据为: " + msg);
+        System.out.println("返回给前段的数据为: " + msg);
         ByteBuf byteBuf = ctx.alloc().buffer().writeBytes(msg.getBytes(Charset.forName("UTF-8")));
 
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,byteBuf);

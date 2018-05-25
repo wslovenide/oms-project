@@ -16,7 +16,7 @@ function createChatRoom(ele) {
         layer.open({
             id:"GROUP" + resp.msg,
             type: 2,
-            title: $(ele).attr("nickName"),
+            title: $(ele).text(),
             maxmin: true,
             shade: false,
             area: ['90%', '80%'],

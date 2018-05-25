@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.ws.oms.chat.netty.dao.usergroup.IUserGroupService;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgItemResp;
 import com.ws.oms.chat.netty.handler.dto.ChatMsgResp;
-import com.ws.oms.chat.netty.handler.dto.OnlineInfoResp;
 import com.ws.oms.chat.netty.service.channel.IChannelService;
 import com.ws.oms.chat.netty.util.Constant;
 import io.netty.channel.Channel;
@@ -12,7 +11,6 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * Description:
@@ -109,7 +107,6 @@ public class ChannelService implements IChannelService {
                         itemResp.setNickName(sessionId.split("-")[0]);
                         chatMsgResp.setCount(channelList.size());
                         chatMsgResp.setMsg(itemResp);
-                        chatMsgResp.setExt(getOnlineInfoList());
                         TextWebSocketFrame respMsg = new TextWebSocketFrame(JSON.toJSONString(chatMsgResp));
                         if (ch != current){
                             if (ch.isOpen() && ch.isActive() && ch.isWritable()){
@@ -145,21 +142,6 @@ public class ChannelService implements IChannelService {
     }
 
     @Override
-    public Set<String> getOnlineSessionIds() {
-        return new HashSet<>(channelSessionMap.values());
-    }
-
-    @Override
-    public List<OnlineInfoResp> getOnlineInfoList() {
-        return getOnlineSessionIds().stream().map(sessionId -> {
-            OnlineInfoResp infoResp = new OnlineInfoResp();
-            infoResp.setSessionId(sessionId);
-            infoResp.setNickName(sessionId.split("-")[0]);
-            return infoResp;
-        }).collect(Collectors.toList());
-    }
-
-    @Override
     public boolean containsSessionId(String sessionId) {
         return this.userGroupService.containsSessionId(sessionId);
     }
@@ -184,7 +166,12 @@ public class ChannelService implements IChannelService {
         Set<String> groupList = userGroupService.getGroupList(sessionId);
         if (groupList != null && !groupList.isEmpty()){
             groupList.forEach(groupId -> {
-                groupChannelMap.putIfAbsent(groupId,new HashSet<>()).add(channel);
+                Set<Channel> channelList = groupChannelMap.get(groupId);
+                if (channelList == null){
+                    channelList = new HashSet<>();
+                    groupChannelMap.put(groupId,channelList);
+                }
+                channelList.add(channel);
             });
         }
     }

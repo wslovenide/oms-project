@@ -42,7 +42,6 @@
     <module>oms-service-api</module>
     <module>oms-job</module>
       <module>oms-chat</module>
-    <module>oms-etherscan</module>
   </modules>
 
 </project>
