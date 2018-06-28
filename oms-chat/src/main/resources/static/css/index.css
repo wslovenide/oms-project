@@ -45,52 +45,34 @@ body {
     margin-left: 1rem;
     float: left;
     margin-top: 0.5rem;
-    width: 85%;
+    width: 60%;
     clear: both;
     text-align: left;
 }
 .rightMessageLabel{
     float: right;
-    width: 85%;
+    width: 60%;
     margin-right: 1rem;
     margin-top: 0.5rem;
     clear: both;
     text-align: right;
 }
 .msgClass{
-    font-size: 12px;
-    margin-left: 4px;
+
 }
 .nickNameClass{
-    font-size: 12px;
+    font-size: 10px;
     margin: auto 2px;
     cursor: pointer;
     color: blue;
 }
 .dateTimeClass{
     font-size: 10px;
-    color: gray;
-    margin-left: 4px;
+    margin: auto 2px;
 }
 .onlineOfflineTip{
     clear: both;
     text-align: center;
     color: gainsboro;
     font-size: 10px;
-}
-.onlineInfoContent{
-    clear: both;
-    width:80%;
-    left: 10%;
-    font-size: 10px;
-    text-align: center;
-    position: fixed;
-}
-div.onlineLabel{
-    margin-left: 3px;
-    margin-right: 3px;
-    display: inline-block;
-    line-height: 1.5em;
-    color: blue;
-    cursor: pointer;
 }

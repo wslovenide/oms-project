@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Queue;
 
 /**
  * Created by gongmei on 2018/5/23.
@@ -23,12 +23,13 @@ import java.util.Queue;
 @Service
 public class EthExportService {
 
-
     private Logger logger = LoggerFactory.getLogger(EthExportService.class);
-
 
     @Value("${eth.token.save.path}")
     private String savePath;
+
+    @Resource
+    private EthChartService ethChartService;
 
     public void saveToExcel(ExportExcelDTO excelDTO){
         String date = new SimpleDateFormat("MM月dd日").format(new Date());
@@ -58,10 +59,8 @@ public class EthExportService {
             HSSFCell cell = row.createCell(1);
             cell.setCellValue(excelDTO.getEthName()+"持有数据汇总("+dateTime+")");
 
-
             row.createCell(2).setCellValue("数量");
             row.createCell(3).setCellValue("占比");
-
 
             HSSFRow row1 = sheet.createRow(1);
             row1.createCell(1).setCellValue("发行总量");
@@ -73,18 +72,15 @@ public class EthExportService {
             row2.createCell(2).setCellValue(excelDTO.getTop10().toString());
             row2.createCell(3).setCellValue(excelDTO.getTop10Rate().toString()+"%");
 
-
             HSSFRow row3 = sheet.createRow(3);
             row3.createCell(1).setCellValue("TOP20持有量");
             row3.createCell(2).setCellValue(excelDTO.getTop20().toString());
             row3.createCell(3).setCellValue(excelDTO.getTop20Rate().toString()+"%");
 
-
             HSSFRow row4 = sheet.createRow(4);
             row4.createCell(1).setCellValue("TOP50持有量");
             row4.createCell(2).setCellValue(excelDTO.getTop50().toString());
             row4.createCell(3).setCellValue(excelDTO.getTop50Rate().toString()+"%");
-
 
             HSSFRow row5 = sheet.createRow(5);
             row5.createCell(1).setCellValue("TOP100持有量");
@@ -101,7 +97,6 @@ public class EthExportService {
             row7.createCell(2).setCellValue(excelDTO.getTop500().toString());
             row7.createCell(3).setCellValue(excelDTO.getTop500Rate().toString()+"%");
 
-
             HSSFRow row9 = sheet.createRow(9);
             row9.createCell(0).setCellValue("排名");
             row9.createCell(1).setCellValue("持有者地址");
@@ -117,9 +112,13 @@ public class EthExportService {
                 row10.createCell(1).setCellValue(detail.getAddress());
                 row10.createCell(2).setCellValue(detail.getQuantity());
                 row10.createCell(3).setCellValue(detail.getPercentage());
-
             }
-            String fileName = excelDTO.getEthName()+"-"+dateTime+".xls";
+            String fileName;
+            if (excelDTO.isPerDay()){
+                fileName = excelDTO.getEthName()+"-"+date+".xls";
+            }else {
+                fileName = excelDTO.getEthName()+"-"+dateTime+".xls";
+            }
             File file = new File(new File(filePath),fileName);
 
             sheet.autoSizeColumn(1);
@@ -136,9 +135,14 @@ public class EthExportService {
         }
     }
 
-
     private void saveDayStatistic(ExportExcelDTO excelDTO,String filePath,String date,String time) throws Exception{
-        String fileName = excelDTO.getEthName()+"-"+date+".xls";
+        String fileName = excelDTO.getEthName()+"-"+date+"-日汇总.xls";
+        if (excelDTO.isPerDay()){
+            filePath = savePath+ "/" + excelDTO.getEthName().trim();
+            String dateMonth = new SimpleDateFormat("yyyy年MM月").format(new Date());
+            fileName = excelDTO.getEthName().trim() + dateMonth + "汇总.xls";
+            time = date;
+        }
         File file = new File(filePath,fileName);
         if (file.exists()){
             HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(file));
@@ -152,6 +156,12 @@ public class EthExportService {
             sheetAt.getRow(4).createCell(lastCellNum).setCellValue(excelDTO.getTop100Rate().toString()+"%");
             sheetAt.getRow(5).createCell(lastCellNum).setCellValue(excelDTO.getTop200Rate().toString()+"%");
             sheetAt.getRow(6).createCell(lastCellNum).setCellValue(excelDTO.getTop500Rate().toString()+"%");
+
+            try {
+                ethChartService.createChartToExcel(workbook);
+            }catch (Exception e){
+                logger.error("生成图片出错!" , e);
+            }
             workbook.write(file);
             workbook.close();
         }else {

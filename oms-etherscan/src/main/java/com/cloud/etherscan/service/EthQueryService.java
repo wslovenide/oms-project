@@ -54,7 +54,7 @@ public class EthQueryService {
     private String ethSearchHandlerHost;
 
 
-    public void queryTokenByName(List<String> names){
+    public void queryTokenByName(List<String> names,boolean perDay){
         List<Future> list = new ArrayList<>(names.size());
         for (String name : names){
             if (name == null || name.trim().length() < 1){
@@ -93,7 +93,7 @@ public class EthQueryService {
                         if (fullName.trim().equalsIgnoreCase(name)){
                             logger.info("开始抓取[{}]的明细数据!",name);
                             list.add(networkQueryPool.submit(() -> {
-                                queryEthTokenList(split[1],fullName);
+                                queryEthTokenList(split[1],fullName,perDay);
                             } ));
                             break;
                         }
@@ -114,7 +114,7 @@ public class EthQueryService {
         logger.info("全部执行完成!");
     }
 
-    public void queryEthTokenList(String token,String ethName){
+    public void queryEthTokenList(String token,String ethName,boolean perDay){
         // 查询总数
         String[] tokenCount = getTotalCount(token);
         if (tokenCount == null){
@@ -141,6 +141,7 @@ public class EthQueryService {
         }
         exportExcelPool.submit(() -> {
             ExportExcelDTO excelDTO = calculateStatistic(all, tokenCount[0], ethName);
+            excelDTO.setPerDay(perDay);
             ethExportService.saveToExcel(excelDTO);
         });
     }
@@ -178,7 +179,6 @@ public class EthQueryService {
         BigDecimal divide3 = top100.multiply(multi).divide(totalToken, 2, BigDecimal.ROUND_HALF_UP);
         BigDecimal divide4 = top200.multiply(multi).divide(totalToken, 2, BigDecimal.ROUND_HALF_UP);
         BigDecimal divide5 = top500.multiply(multi).divide(totalToken, 2, BigDecimal.ROUND_HALF_UP);
-
 
         ExportExcelDTO excelDTO = new ExportExcelDTO();
         excelDTO.setEthName(ethName);
