@@ -31,22 +31,22 @@ import java.nio.file.Paths;
 @Service
 public class EthChartService {
 
-//    public static void main(String[] args) {
-//
-//        try {
-//            File file = new File("G:\\logs\\EOS\\05月25日\\EOS-05月25日-日汇总.xls");
-//
-//            HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(file));
-//
-//            new EthChartService().createChartToExcel(workbook);
-//
-//            workbook.write(new FileOutputStream(file));
-//            workbook.close();
-//            System.out.println("finished....");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public static void main(String[] args) {
+
+        try {
+            File file = new File("G:\\logs\\EOS\\05月25日\\EOS-05月25日-日汇总.xls");
+
+            HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(file));
+
+            new EthChartService().createChartToExcel(workbook);
+
+            workbook.write(new FileOutputStream(file));
+            workbook.close();
+            System.out.println("finished....");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public void createChartToExcel(HSSFWorkbook workbook){
@@ -126,8 +126,8 @@ public class EthChartService {
         }
         // TODO: 2018-05-25   图片会重复叠加上去
         HSSFSheet sheet = workbook.getSheetAt(0);
-        HSSFPatriarch patriarch = sheet.createDrawingPatriarch();
-        HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 255, 255,(short) firstX, y1, (short) secondX, y2);
+        HSSFPatriarch patriarch = sheet.getDrawingPatriarch();
+        HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 1023, 255,(short) firstX, y1, (short) secondX, y2);
         anchor.setAnchorType(ClientAnchor.AnchorType.DONT_MOVE_AND_RESIZE);
         patriarch.createPicture(anchor, workbook.addPicture(image, HSSFWorkbook.PICTURE_TYPE_JPEG));
     }
