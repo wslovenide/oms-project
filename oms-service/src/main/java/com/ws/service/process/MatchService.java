@@ -42,12 +42,24 @@ public class MatchService {
         List<String> list = fileMappingMap.get(start);
         for (String item : list){
             String key = start + Constants.ITEM_SEPARATOR + item;
-
             Map<Integer, List<Integer>> integerListMap = fileItemMappingMap.get(key);
             if (CollectionUtils.isEmpty(integerListMap)){
                 continue;
             }
+            Iterator<Integer> iterator = integerListMap.keySet().iterator();
+            while (iterator.hasNext()){
+                // A
+                Integer next = iterator.next();
+                //
+                List<Integer> integers = integerListMap.get(next);
 
+                for (Integer integer : integers){
+
+                    match(item);
+
+                }
+
+            }
         }
     }
 
