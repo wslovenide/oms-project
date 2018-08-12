@@ -261,11 +261,11 @@ public class ImageHelper {
          * **/
         InputStream in = null;
         //缩放后需要保存的路径
-        File saveFile = new File("/Users/gongmei/Desktop/XRV雅韵金/u=2859719634,4239030051&fm=27&gp=0_1.jpg");
+        File saveFile = new File("/Users/gongmei/Desktop/XRV雅韵金/IMG_4160_1.JPG");
         try {
             //原图片的路径
-            in = new FileInputStream(new File("/Users/gongmei/Desktop/XRV雅韵金/u=2859719634,4239030051&fm=27&gp=0.jpg"));
-            if(compress(in, saveFile, 3)){
+            in = new FileInputStream(new File("/Users/gongmei/Desktop/XRV雅韵金/IMG_4160.JPG"));
+            if(compress(in, saveFile, 5)){
                 System.out.println("图片压缩5倍！");
             }
         } catch (Exception e) {
