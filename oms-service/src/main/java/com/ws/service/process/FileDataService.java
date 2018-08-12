@@ -76,8 +76,10 @@ public class FileDataService {
         }
         List<String> candidateList = new LinkedList<>();
         for (int i = startIndex; i < endIndex; i++){
-            String item = Constants.ITEMS[startIndex] + Constants.ITEM_SEPARATOR + Constants.ITEMS[i+1];
-            candidateList.add(item);
+            for (int j = i + 1; j <= endIndex; j++){
+                String item = Constants.ITEMS[i] + Constants.ITEM_SEPARATOR + Constants.ITEMS[j];
+                candidateList.add(item);
+            }
         }
         return candidateList;
     }

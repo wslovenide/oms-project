@@ -10,10 +10,19 @@ public class Start {
 
     public static void main(String[] args) {
 
+        long start = System.currentTimeMillis();
+
         List<String> candidateFileNames = new FileDataService().findCandidateFileNames("A--D");
+
+        MatchService matchService = new MatchService();
         System.out.println(candidateFileNames);
 
+        for (String str : candidateFileNames){
+            matchService.prepareData(str);
+        }
+        matchService.print();
 
+        System.out.println(System.currentTimeMillis() - start);
     }
 
 }

@@ -16,7 +16,7 @@ public class Constants {
 
     public static final Map<String,List<String>> ITEM_MAP = new HashMap<>();
 
-    public static final String DATA_FILE_PATH = "/Users/gongmei/Desktop/sss/data";
+    public static final String DATA_FILE_PATH = "C:\\Users\\lenovo\\Desktop\\快递\\sss\\data";
 
 
     static {
